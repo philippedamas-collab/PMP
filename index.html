@@ -1,0 +1,3018 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMBOK® 7 — Guide de Révision PMP</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2230;
+    --border: #2d3748;
+    --accent: #0ea5e9;
+    --accent2: #38bdf8;
+    --gold: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --sidebar-w: 300px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-header {
+    padding: 20px 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .sidebar-subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .progress-bar-outer {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  /* Chapter nav */
+  #chapter-nav {
+    overflow-y: auto;
+    flex: 1;
+    padding: 8px 0;
+  }
+
+  #chapter-nav::-webkit-scrollbar { width: 4px; }
+  #chapter-nav::-webkit-scrollbar-track { background: transparent; }
+  #chapter-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 10px 16px 4px;
+  }
+
+  .chapter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .chapter-item:hover { background: var(--surface2); }
+
+  .chapter-item.active {
+    background: rgba(14, 165, 233, 0.08);
+    border-left-color: var(--accent);
+  }
+
+  .chapter-item.done { opacity: 0.6; }
+
+  .chapter-check {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    background: transparent;
+  }
+
+  .chapter-check.checked {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .chapter-check.checked::after {
+    content: '✓';
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+  }
+
+  .chapter-name {
+    font-size: 12.5px;
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  .chapter-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    background: var(--surface2);
+    color: var(--muted);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* MAIN */
+  #main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 48px;
+    max-width: 900px;
+  }
+
+  #main::-webkit-scrollbar { width: 6px; }
+  #main::-webkit-scrollbar-track { background: transparent; }
+  #main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .chapter-view { display: none; }
+  .chapter-view.active { display: block; }
+
+  .chapter-header {
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .chapter-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .chapter-desc {
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 600px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 28px 0 12px;
+    color: var(--accent2);
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 20px 0 8px;
+    color: var(--gold);
+  }
+
+  p { margin-bottom: 10px; font-size: 14px; }
+
+  ul, ol { padding-left: 20px; margin-bottom: 12px; }
+  li { font-size: 14px; margin-bottom: 4px; }
+
+  /* Info boxes */
+  .box {
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 14px 0;
+    border-left: 3px solid;
+    font-size: 13.5px;
+  }
+
+  .box-blue { background: rgba(14,165,233,0.07); border-color: var(--accent); }
+  .box-gold { background: rgba(245,158,11,0.07); border-color: var(--gold); }
+  .box-green { background: rgba(16,185,129,0.07); border-color: var(--green); }
+  .box-purple { background: rgba(139,92,246,0.07); border-color: var(--purple); }
+
+  .box strong { color: var(--accent2); }
+
+  /* Key concept tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* Principles grid */
+  .principle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .principle-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .principle-card .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .principle-card strong { font-size: 13px; display: block; margin-bottom: 3px; font-family: 'Syne', sans-serif; }
+  .principle-card span { font-size: 12px; color: var(--muted); }
+
+  /* Domain cards */
+  .domain-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+  .domain-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .domain-icon {
+    width: 32px; height: 32px; min-width: 32px;
+    background: rgba(14,165,233,0.1);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .domain-row h4 { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .domain-row p { font-size: 12px; color: var(--muted); margin: 0; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+  th {
+    background: var(--surface);
+    padding: 8px 12px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 8px 12px; border-bottom: 1px solid rgba(45,55,72,0.5); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  /* ====== QCM ====== */
+  .qcm-section {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 2px dashed var(--border);
+  }
+
+  .qcm-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .qcm-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text);
+  }
+
+  .qcm-badge {
+    background: var(--purple);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .question-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .question-block.answered { border-color: var(--border); }
+
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 7px; }
+
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    font-size: 13.5px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(14,165,233,0.06);
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .option-btn.correct {
+    border-color: var(--green);
+    background: rgba(16,185,129,0.1);
+    color: var(--green);
+  }
+
+  .option-btn.wrong {
+    border-color: var(--red);
+    background: rgba(239,68,68,0.08);
+    color: var(--red);
+    opacity: 0.7;
+  }
+
+  .opt-letter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    min-width: 20px;
+    font-weight: 600;
+  }
+
+  .explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(16,185,129,0.06);
+    border-left: 3px solid var(--green);
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .explanation.show { display: block; }
+
+  .qcm-submit {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .btn-submit {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn-submit:hover { opacity: 0.85; }
+
+  .score-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    display: none;
+  }
+
+  .score-display.show { display: block; }
+
+  .score-display span { color: var(--gold); font-weight: 700; }
+
+  /* Nav arrows */
+  .chapter-nav-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn.mark-done { background: var(--green); border-color: var(--green); color: white; margin-left: auto; }
+  .nav-btn.mark-done:hover { opacity: 0.85; }
+
+  /* Separators */
+  .sep { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* Keyword highlight */
+  .kw { color: var(--accent2); font-weight: 500; }
+  .kw-g { color: var(--green); font-weight: 500; }
+  .kw-gold { color: var(--gold); font-weight: 500; }
+
+  /* Two columns */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .col-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .col-card h4 { font-family: 'Syne', sans-serif; font-size: 12px; margin-bottom: 6px; }
+  .col-card ul { margin: 0; padding-left: 16px; }
+  .col-card li { font-size: 12px; margin-bottom: 2px; }
+
+  /* Welcome screen */
+  #welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    padding: 40px;
+  }
+  #welcome .logo { font-size: 48px; margin-bottom: 16px; }
+  #welcome h1 { font-family: 'Syne', sans-serif; font-size: 36px; margin-bottom: 8px; }
+  #welcome p { color: var(--muted); max-width: 500px; }
+  #welcome .start-btn {
+    margin-top: 24px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .version-note {
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">PMBOK® 7</div>
+    <div class="sidebar-subtitle">Guide de révision PMP • 7ème édition</div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progression</span>
+      <span id="progress-text">0 / 12 chapitres</span>
+    </div>
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="progress-bar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="chapter-nav">
+
+    <div class="section-label">⚙ LE STANDARD</div>
+
+    <div class="chapter-item" data-ch="ch0">
+      <div class="chapter-check" data-ch="ch0"></div>
+      <div class="chapter-name">Introduction & Concepts clés</div>
+      <div class="chapter-badge">S1</div>
+    </div>
+    <div class="chapter-item" data-ch="ch1">
+      <div class="chapter-check" data-ch="ch1"></div>
+      <div class="chapter-name">Système de création de valeur</div>
+      <div class="chapter-badge">S2</div>
+    </div>
+    <div class="chapter-item" data-ch="ch2">
+      <div class="chapter-check" data-ch="ch2"></div>
+      <div class="chapter-name">12 Principes — P1 à P6</div>
+      <div class="chapter-badge">S3a</div>
+    </div>
+    <div class="chapter-item" data-ch="ch3">
+      <div class="chapter-check" data-ch="ch3"></div>
+      <div class="chapter-name">12 Principes — P7 à P12</div>
+      <div class="chapter-badge">S3b</div>
+    </div>
+
+    <div class="section-label">📊 DOMAINES DE PERFORMANCE</div>
+
+    <div class="chapter-item" data-ch="ch4">
+      <div class="chapter-check" data-ch="ch4"></div>
+      <div class="chapter-name">D1 — Parties Prenantes</div>
+      <div class="chapter-badge">D1</div>
+    </div>
+    <div class="chapter-item" data-ch="ch5">
+      <div class="chapter-check" data-ch="ch5"></div>
+      <div class="chapter-name">D2 — Équipe Projet</div>
+      <div class="chapter-badge">D2</div>
+    </div>
+    <div class="chapter-item" data-ch="ch6">
+      <div class="chapter-check" data-ch="ch6"></div>
+      <div class="chapter-name">D3 — Approche & Cycle de vie</div>
+      <div class="chapter-badge">D3</div>
+    </div>
+    <div class="chapter-item" data-ch="ch7">
+      <div class="chapter-check" data-ch="ch7"></div>
+      <div class="chapter-name">D4 — Planification</div>
+      <div class="chapter-badge">D4</div>
+    </div>
+    <div class="chapter-item" data-ch="ch8">
+      <div class="chapter-check" data-ch="ch8"></div>
+      <div class="chapter-name">D5 — Travail du Projet</div>
+      <div class="chapter-badge">D5</div>
+    </div>
+    <div class="chapter-item" data-ch="ch9">
+      <div class="chapter-check" data-ch="ch9"></div>
+      <div class="chapter-name">D6 — Livraison & Qualité</div>
+      <div class="chapter-badge">D6</div>
+    </div>
+    <div class="chapter-item" data-ch="ch10">
+      <div class="chapter-check" data-ch="ch10"></div>
+      <div class="chapter-name">D7 — Mesure & Performance</div>
+      <div class="chapter-badge">D7</div>
+    </div>
+    <div class="chapter-item" data-ch="ch11">
+      <div class="chapter-check" data-ch="ch11"></div>
+      <div class="chapter-name">D8 — Incertitude & Risque</div>
+      <div class="chapter-badge">D8</div>
+    </div>
+
+    <div class="section-label">🔧 GUIDE PMBOK</div>
+
+    <div class="chapter-item" data-ch="ch12">
+      <div class="chapter-check" data-ch="ch12"></div>
+      <div class="chapter-name">Adaptation du projet</div>
+      <div class="chapter-badge">G3</div>
+    </div>
+    <div class="chapter-item" data-ch="ch13">
+      <div class="chapter-check" data-ch="ch13"></div>
+      <div class="chapter-name">Modèles, Techniques & Artefacts</div>
+      <div class="chapter-badge">G4</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- Welcome -->
+  <div id="welcome">
+    <div class="logo">📘</div>
+    <h1>Guide PMBOK® 7</h1>
+    <p>Révision condensée pour l'examen PMP. Cochez chaque chapitre au fur et à mesure, testez-vous avec les QCM, et suivez votre progression.</p>
+    <button class="start-btn" onclick="showChapter('ch0')">Commencer la révision →</button>
+    <div class="version-note">PMBOK® Guide • 7ème édition • Français</div>
+  </div>
+
+  <!-- ======== CH0: Introduction ======== -->
+  <div class="chapter-view" id="ch0">
+    <div class="chapter-header">
+      <div class="chapter-tag">STANDARD · SECTION 1</div>
+      <h1>Introduction & Concepts Clés</h1>
+      <div class="chapter-desc">Objectif du Standard, terminologie fondamentale, public cible et structure du PMBOK 7.</div>
+    </div>
+
+    <h2>🎯 Objectif du Standard</h2>
+    <p>Le Standard sert de <span class="kw">point de départ</span> pour comprendre le management de projet et obtenir les résultats souhaités. Il s'applique à <strong>tous les secteurs, tailles, et approches</strong> (prédictive, hybride, adaptative).</p>
+
+    <div class="box box-blue">
+      <strong>Nouveauté PMBOK 7 vs 6 :</strong> Le PMBOK 7 passe d'une approche orientée <em>processus</em> (49 processus dans 10 domaines de connaissance) à une approche orientée <em>principes</em> et <em>résultats</em>. Accent sur la valeur, pas seulement les livrables.
+    </div>
+
+    <h2>📚 Terminologie Fondamentale</h2>
+    <table>
+      <tr><th>Terme</th><th>Définition Essentielle</th></tr>
+      <tr><td><strong>Projet</strong></td><td>Initiative <span class="kw">temporaire</span> pour fournir un produit, service ou résultat unique</td></tr>
+      <tr><td><strong>Programme</strong></td><td>Projets apparentés dont le management coordonné produit des bénéfices impossibles séparément</td></tr>
+      <tr><td><strong>Portefeuille</strong></td><td>Ensemble de projets/programmes gérés pour atteindre des <span class="kw">objectifs stratégiques</span></td></tr>
+      <tr><td><strong>Résultat</strong></td><td>Conséquence d'un processus ; accent sur les bénéfices et la <span class="kw">valeur</span>, pas seulement la donnée de sortie</td></tr>
+      <tr><td><strong>Valeur</strong></td><td>Intérêt, importance ou utilité d'un élément (financière, sociale, perçue...)</td></tr>
+      <tr><td><strong>Chef de projet</strong></td><td>Personne désignée pour diriger l'équipe et gérer les processus pour les résultats souhaités</td></tr>
+      <tr><td><strong>Système de création de valeur</strong></td><td>Ensemble d'activités stratégiques pour établir, pérenniser ou faire progresser une organisation</td></tr>
+    </table>
+
+    <h2>🗂 Structure du PMBOK 7</h2>
+    <div class="box box-gold">
+      Le PMBOK 7 = <strong>Le Standard pour le management de projet</strong> + <strong>Le Guide PMBOK®</strong>
+    </div>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>📐 Le Standard (3 sections)</h4>
+        <ul>
+          <li>S1 — Introduction</li>
+          <li>S2 — Système de création de valeur</li>
+          <li>S3 — <strong>12 Principes</strong></li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>📋 Le Guide PMBOK (4 sections)</h4>
+        <ul>
+          <li>S1 — Introduction</li>
+          <li>S2 — <strong>8 Domaines de performance</strong></li>
+          <li>S3 — Adaptation</li>
+          <li>S4 — Modèles, Techniques, Artefacts</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>👤 Public Cible</h2>
+    <p>Chefs de projet, membres d'équipe, sponsors, consultants, PMO, formation — tous ceux qui <strong>travaillent sur des projets ou y participent</strong>, à temps plein ou partiel.</p>
+
+    <div class="sep"></div>
+
+    <!-- QCM -->
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Introduction</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block" id="ch0-q1">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">Quelle est la principale différence entre le PMBOK 6 et le PMBOK 7 ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Le PMBOK 7 supprime les processus et n'offre aucune méthodologie.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Le PMBOK 7 passe d'une approche par processus à une approche par principes et domaines de performance orientés résultats.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Le PMBOK 7 réduit le nombre de domaines de connaissance de 10 à 5.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Le PMBOK 7 se concentre exclusivement sur les méthodes Agile.</button>
+        </div>
+        <div class="explanation">✅ Le PMBOK 7 passe de 49 processus/10 domaines de connaissance (PMBOK 6) à 12 principes + 8 domaines de performance, avec un accent sur les résultats et la valeur plutôt que sur les livrables seuls.</div>
+      </div>
+
+      <div class="question-block" id="ch0-q2">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">Un projet se distingue des opérations courantes par le fait qu'il est :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Continu et répétitif dans le temps.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Toujours réalisé par une équipe externalisée.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Temporaire et vise à fournir un résultat unique.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Limité à un seul département de l'organisation.</button>
+        </div>
+        <div class="explanation">✅ Un projet est défini comme une initiative temporaire (avec un début et une fin) visant à fournir un produit, service ou résultat unique.</div>
+      </div>
+
+      <div class="question-block" id="ch0-q3">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">Un portefeuille est défini comme :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Un seul grand projet divisé en sous-projets.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Des projets uniquement de même nature ou secteur.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Des projets, programmes, portefeuilles subsidiaires et opérations gérés ensemble pour atteindre des objectifs stratégiques.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> L'ensemble des ressources humaines disponibles pour les projets.</button>
+        </div>
+        <div class="explanation">✅ Un portefeuille regroupe projets, programmes et opérations gérés collectivement pour atteindre des objectifs stratégiques de l'organisation.</div>
+      </div>
+
+      <div class="question-block" id="ch0-q4">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">Le Standard pour le management de projet (PMBOK 7) s'applique :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Uniquement aux projets utilisant l'approche prédictive (en cascade).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Seulement aux projets de grande taille et de complexité élevée.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Indépendamment du secteur, du lieu, de la taille ou de l'approche de développement.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Uniquement aux membres certifiés PMP.</button>
+        </div>
+        <div class="explanation">✅ Le Standard est universel : il s'applique quels que soient le secteur, la taille, le pays, et l'approche utilisée (prédictive, hybride ou adaptative).</div>
+      </div>
+
+      <div class="question-block" id="ch0-q5">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">Quelle est la distinction essentielle entre "résultat" et "livrable" dans le PMBOK 7 ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Un livrable est intangible tandis qu'un résultat est toujours physique.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Un résultat englobe les bénéfices et la valeur créée, au-delà de la simple donnée de sortie qu'est le livrable.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Il n'y a aucune différence : les deux termes sont synonymes dans le PMBOK 7.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Un résultat est uniquement financier, un livrable peut être de toute nature.</button>
+        </div>
+        <div class="explanation">✅ Le PMBOK 7 insiste sur les "résultats" (bénéfices, valeur) et pas seulement les "livrables" (artefacts produits). Un projet réussi produit de la valeur, pas juste des livrables.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch0')">Voir les résultats</button>
+        <div class="score-display" id="ch0-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch1')">Chapitre suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch0')">✓ Marquer comme terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH1: Système de création de valeur ======== -->
+  <div class="chapter-view" id="ch1">
+    <div class="chapter-header">
+      <div class="chapter-tag">STANDARD · SECTION 2</div>
+      <h1>Système de Création de Valeur</h1>
+      <div class="chapter-desc">Comment les projets s'inscrivent dans un système plus large pour générer de la valeur organisationnelle.</div>
+    </div>
+
+    <h2>🏗 Création de Valeur</h2>
+    <p>Les projets existent dans un système plus vaste (organisation, accord contractuel). La valeur peut être créée de plusieurs façons :</p>
+    <ul>
+      <li>Créer un nouveau produit/service répondant aux besoins clients</li>
+      <li>Améliorer l'efficacité, la productivité, la réactivité</li>
+      <li>Contributions sociales ou environnementales positives</li>
+      <li>Conduire une transition vers l'état futur souhaité</li>
+      <li>Pérenniser les bénéfices de projets précédents</li>
+    </ul>
+
+    <h2>📐 Composants du Système de Création de Valeur</h2>
+    <div class="domain-list">
+      <div class="domain-row">
+        <div class="domain-icon">🎯</div>
+        <div><h4>Portefeuille</h4><p>Ensemble aligné sur la stratégie. Contient programmes + projets + opérations.</p></div>
+      </div>
+      <div class="domain-row">
+        <div class="domain-icon">🔗</div>
+        <div><h4>Programme</h4><p>Projets apparentés coordonnés pour des bénéfices impossibles séparément.</p></div>
+      </div>
+      <div class="domain-row">
+        <div class="domain-icon">📌</div>
+        <div><h4>Projet</h4><p>Initiative temporaire unique. Peut être indépendant ou dans un programme/portefeuille.</p></div>
+      </div>
+      <div class="domain-row">
+        <div class="domain-icon">⚙️</div>
+        <div><h4>Opérations</h4><p>Activités courantes qui soutiennent et influencent portefeuilles, programmes et projets.</p></div>
+      </div>
+    </div>
+
+    <h2>🏛 Gouvernance Organisationnelle</h2>
+    <p>La gouvernance soutient le système de création de valeur en fournissant :</p>
+    <ul>
+      <li>Un cadre de surveillance et de prise de décision</li>
+      <li>Des règles, politiques et procédures</li>
+      <li>Un alignement entre les projets et la stratégie</li>
+      <li>Des mécanismes de contrôle et de redevabilité</li>
+    </ul>
+
+    <div class="box box-blue">
+      <strong>PMO (Bureau des projets) :</strong> Entité de gouvernance qui standardise les pratiques de management de projet, fournit des ressources, outils et coaching. Ses principales capacités : supervision des projets, développement des méthodologies, allocation des ressources.
+    </div>
+
+    <h2>🧩 Fonctions Associées aux Projets</h2>
+    <table>
+      <tr><th>Fonction</th><th>Rôle</th></tr>
+      <tr><td><strong>Fournir surveillance et coordination</strong></td><td>Assurer l'alignement avec la stratégie, gérer les interdépendances</td></tr>
+      <tr><td><strong>Présenter des objectifs et des retours d'information</strong></td><td>Clarifier les attentes, fournir des informations sur les résultats</td></tr>
+      <tr><td><strong>Faciliter et soutenir</strong></td><td>Éliminer les obstacles, fournir des ressources et un coaching</td></tr>
+      <tr><td><strong>Effectuer le travail et apporter des contributions</strong></td><td>Réaliser le travail du projet pour produire les livrables</td></tr>
+      <tr><td><strong>Appliquer l'expertise spécialisée</strong></td><td>Connaissances techniques spécifiques nécessaires au projet</td></tr>
+    </table>
+
+    <h2>🌍 Environnement du Projet</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>🏢 Facteurs INTERNES (EFO)</h4>
+        <ul>
+          <li>Culture et structure organisationnelle</li>
+          <li>Distribution géographique</li>
+          <li>Systèmes d'information</li>
+          <li>Disponibilité des ressources</li>
+          <li>Capacités des employés</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🌐 Facteurs EXTERNES (EFO)</h4>
+        <ul>
+          <li>Conditions du marché</li>
+          <li>Exigences légales/réglementaires</li>
+          <li>Conditions climatiques/météo</li>
+          <li>Concurrence</li>
+          <li>Bases de données commerciales</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box box-gold">
+      <strong>EFO = Facteurs Environnementaux de l'Organisation.</strong> Ils influencent directement les projets et ne sont pas sous le contrôle de l'équipe projet. Distinguer EFO internes vs externes est un sujet fréquent à l'examen.
+    </div>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Système de Valeur</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">Quelle est la principale différence entre un programme et un portefeuille ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Un programme est plus grand qu'un portefeuille.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Un programme regroupe des projets apparentés pour des bénéfices communs ; un portefeuille regroupe programmes/projets/opérations pour des objectifs stratégiques.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Un portefeuille ne contient que des projets, jamais des programmes.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Les deux termes sont synonymes dans le PMBOK 7.</button>
+        </div>
+        <div class="explanation">✅ Programme = projets apparentés coordonnés pour des bénéfices synergiques. Portefeuille = ensemble aligné sur la stratégie (peut contenir programmes, projets, opérations).</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">Le PMO (Bureau des projets) a pour rôle principal de :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Remplacer le chef de projet pour les décisions techniques.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Standardiser les pratiques de management de projet et fournir ressources, outils et gouvernance.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Gérer uniquement les ressources humaines des projets.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Contrôler les budgets des projets de manière exclusive.</button>
+        </div>
+        <div class="explanation">✅ Le PMO standardise les pratiques, fournit des méthodologies, du coaching, et aligne les projets sur la stratégie. Ses capacités : surveillance, développement des méthodes, allocation des ressources.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">Les conditions du marché et les exigences réglementaires sont des exemples de :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Actifs organisationnels de processus internes.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Facteurs environnementaux de l'organisation (EFO) externes.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Contraintes de l'équipe projet.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Risques identifiés dans le registre des risques.</button>
+        </div>
+        <div class="explanation">✅ Les EFO externes incluent : conditions du marché, concurrence, exigences légales/réglementaires, conditions climatiques. Les EFO internes incluent culture, structure, systèmes d'information.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">La valeur d'un projet peut être :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Uniquement financière, mesurée en ROI.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Uniquement déterminée à la fin du projet.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Financière, sociale, environnementale ou perçue, créée pendant ou après le projet.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Définie uniquement par le sponsor du projet.</button>
+        </div>
+        <div class="explanation">✅ La valeur est multidimensionnelle (financière, sociale, perçue...) et subjective. Elle peut être créée pendant, à la fin ou après le projet. Différentes parties prenantes ont des perceptions différentes de la valeur.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">Les opérations différent des projets car elles sont :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="true"><span class="opt-letter">A</span> Continues, répétitives et liées aux activités courantes de l'organisation.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Temporaires et visant à créer un résultat unique.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Gérées uniquement par des gestionnaires non certifiés.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Indépendantes de la stratégie organisationnelle.</button>
+        </div>
+        <div class="explanation">✅ Les opérations sont continues et répétitives (ex: comptabilité, fabrication en série). Les projets sont temporaires et uniques. Mais les deux contribuent au système de création de valeur.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch1')">Voir les résultats</button>
+        <div class="score-display" id="ch1-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch0')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch2')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch1')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH2: Principes P1-P6 ======== -->
+  <div class="chapter-view" id="ch2">
+    <div class="chapter-header">
+      <div class="chapter-tag">STANDARD · SECTION 3 · PARTIE A</div>
+      <h1>Les 12 Principes — P1 à P6</h1>
+      <div class="chapter-desc">Les 6 premiers principes fondamentaux guidant les comportements et décisions du chef de projet.</div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>Rappel :</strong> Les principes du management de projet sont des <em>lignes directrices comportementales</em>, pas des règles absolues. Ils sont cohérents entre eux et s'appliquent dans n'importe quel contexte.
+    </div>
+
+    <h2>P1 — Être un Gestionnaire Diligent, Respectueux et Attentif</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : GESTION (Stewardship)</strong> — Agir de façon responsable, avec intégrité, attention et fiabilité.
+    </div>
+    <p>4 caractéristiques fondamentales :</p>
+    <ul>
+      <li><span class="kw">Intégrité</span> — honnêteté, éthique, modèle comportemental</li>
+      <li><span class="kw">Attention</span> — supervision diligente (finances, matériel, ressources naturelles)</li>
+      <li><span class="kw">Fiabilité</span> — tenir ses engagements, agir avec conformité</li>
+      <li><span class="kw">Conformité</span> — respecter les directives internes et externes</li>
+    </ul>
+    <p>La gestion s'exerce en interne (organisation) ET en externe (parties prenantes, environnement, communauté).</p>
+
+    <h2>P2 — Créer un Environnement Collaboratif pour l'Équipe Projet</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : COLLABORATION</strong> — Culture d'équipe inclusive favorisant la synergie.
+    </div>
+    <ul>
+      <li><span class="kw">Accords d'équipe</span> — normes comportementales établies collectivement dès le début</li>
+      <li><span class="kw">Structures organisationnelles</span> — rôles, responsabilités, comités, réunions debout</li>
+      <li><span class="kw">Processus</span> — WBS, backlogs, tableaux des tâches</li>
+    </ul>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Autorité vs Redevabilité vs Responsabilité</h4>
+        <ul>
+          <li><strong>Autorité</strong> — droit de décider (ne se partage pas facilement)</li>
+          <li><strong>Redevabilité</strong> — obligation de rendre compte du résultat (ne se partage PAS)</li>
+          <li><strong>Responsabilité</strong> — obligation d'accomplir (peut se PARTAGER)</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Facteurs d'une équipe collaborative</h4>
+        <ul>
+          <li>Diversité valorisée</li>
+          <li>Respect des différences culturelles</li>
+          <li>Partage libre des connaissances</li>
+          <li>Environnement inclusif</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>P3 — Impliquer les Parties Prenantes de Manière Efficace</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : ENGAGEMENT PROACTIF</strong> — L'implication active des parties prenantes favorise la création de valeur.
+    </div>
+    <p>Les parties prenantes influencent : périmètre, échéancier, coût, équipe, plans, résultats, culture, risques, qualité, réussite.</p>
+    <ul>
+      <li>L'engagement commence <strong>avant le projet</strong> et se poursuit jusqu'à la clôture</li>
+      <li>Communication bidirectionnelle (pas seulement push/pull)</li>
+      <li>Compétences interpersonnelles cruciales : écoute active, empathie, confiance</li>
+    </ul>
+
+    <h2>P4 — Se Concentrer sur la Valeur</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : VALEUR = indicateur ultime de réussite</strong>
+    </div>
+    <p>Le cas d'affaires contient 3 éléments clés :</p>
+    <ul>
+      <li><span class="kw">Besoin de l'entreprise</span> — la raison d'être du projet</li>
+      <li><span class="kw">Justification du projet</span> — analyse coût-bénéfice, pourquoi investir maintenant</li>
+      <li><span class="kw">Stratégie d'entreprise</span> — lien avec la création de valeur organisationnelle</li>
+    </ul>
+    <p>La valeur peut être créée en cours de projet, à sa fin, ou après sa clôture. Si le projet ne peut plus produire la valeur escomptée → l'organisation peut choisir de l'arrêter.</p>
+
+    <h2>P5 — Reconnaître, Évaluer et Répondre aux Interactions du Système</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : PENSÉE SYSTÉMIQUE</strong> — Un projet est un système de domaines interdépendants.
+    </div>
+    <ul>
+      <li>Un projet est un <span class="kw">système de systèmes</span> (fait partie d'un programme/portefeuille)</li>
+      <li>Les changements dans une partie affectent le tout</li>
+      <li>Compétences : esprit critique global, remise en question des hypothèses, vision long terme</li>
+      <li>Surveiller constamment conditions internes ET externes</li>
+    </ul>
+
+    <h2>P6 — Manifester des Comportements de Leader</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : LEADERSHIP (≠ Autorité)</strong> — Tous les membres de l'équipe peuvent manifester du leadership.
+    </div>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Leadership vs Autorité</h4>
+        <ul>
+          <li><strong>Leadership</strong> — influence, motivation, vision, empathie</li>
+          <li><strong>Autorité</strong> — droit formel de décider (désigné par charte ou fonction)</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Styles de leadership</h4>
+        <ul>
+          <li>Autocratique, démocratique</li>
+          <li>Laissez-faire, directif</li>
+          <li>Participatif, assertif, de soutien</li>
+          <li>Le meilleur style = <strong>adapté à la situation</strong></li>
+        </ul>
+      </div>
+    </div>
+    <p>Facteurs de motivation : aspect financier, reconnaissance, autonomie, objectif, évolution, contribution personnelle.</p>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Principes P1 à P6</h2>
+        <span class="qcm-badge">6 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/06</div>
+        <div class="q-text">Dans le principe de gestion (stewardship), quelle caractéristique ne peut pas être partagée entre les membres de l'équipe ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> La responsabilité d'accomplir une tâche.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> La redevabilité pour un résultat spécifique.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> L'autorité de prendre des décisions.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Les connaissances et l'expertise technique.</button>
+        </div>
+        <div class="explanation">✅ La REDEVABILITÉ ne se partage pas — une seule personne est redevable d'un résultat. La responsabilité peut se partager. L'autorité peut être déléguée.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/06</div>
+        <div class="q-text">Un chef de projet constate que son sponsor est peu enthousiaste pour le projet. Quelle approche est la plus conforme au principe P3 (Impliquer les parties prenantes) ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Contourner le sponsor et travailler directement avec les utilisateurs finaux.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Attendre que le sponsor exprime ses préoccupations lors de la prochaine réunion d'avancement.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> S'engager proactivement avec le sponsor pour comprendre ses préoccupations et y répondre.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Escalader la situation à la direction générale immédiatement.</button>
+        </div>
+        <div class="explanation">✅ Le principe P3 insiste sur l'engagement PROACTIF. Il faut comprendre les sentiments, émotions et attentes des parties prenantes, même négatives, et y répondre activement.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/06</div>
+        <div class="q-text">Le cas d'affaires (business case) d'un projet contient principalement :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Le plan de management du projet et l'organigramme de l'équipe.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Le besoin de l'entreprise, la justification et la stratégie d'entreprise, avec analyse coût-bénéfice.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> La liste détaillée des livrables et le calendrier du projet.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Le budget détaillé et les contrats avec les fournisseurs.</button>
+        </div>
+        <div class="explanation">✅ Le cas d'affaires = besoin de l'entreprise + justification (analyse coût-bénéfice) + stratégie d'entreprise. Il justifie l'investissement et sert de référence tout au long du projet.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/06</div>
+        <div class="q-text">Selon le principe de pensée systémique (P5), si une modification des exigences est approuvée sur un grand projet de construction, quels éléments sont potentiellement impactés ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Uniquement le coût du projet.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Uniquement l'échéancier et les ressources.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Potentiellement tout : contrats, coût, échéancier, périmètre, sous-traitants, organismes réglementaires.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Seulement les livrables directement concernés par la modification.</button>
+        </div>
+        <div class="explanation">✅ La pensée systémique reconnaît que dans un système de systèmes, un changement peut provoquer des effets en cascade : contractuels, réglementaires, budgétaires, calendaires, sur les fournisseurs, etc.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/06</div>
+        <div class="q-text">Laquelle de ces affirmations sur le leadership est INCORRECTE selon le PMBOK 7 ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Tous les membres de l'équipe peuvent manifester des comportements de leader.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Leadership et autorité sont deux notions distinctes.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Le style de leadership directif est toujours le plus efficace en situation de crise.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Les leaders efficaces adaptent leur style à la situation.</button>
+        </div>
+        <div class="explanation">✅ Aucun style n'est universellement supérieur. Un style directif peut être approprié en période de confusion, mais pas systématiquement. Le leadership efficace = adaptation situationnelle.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 06/06</div>
+        <div class="q-text">Lors de la création des accords d'équipe (principe P2), à quel moment doivent-ils être établis ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> À mi-parcours du projet, une fois que l'équipe se connaît bien.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Dès le début du projet, puis ils évoluent au fil du temps.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> À la fin du projet lors de la rétrospective.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Uniquement si des conflits surgissent dans l'équipe.</button>
+        </div>
+        <div class="explanation">✅ Les accords d'équipe doivent être créés DÈS LE DÉBUT du projet et évolueront à mesure que les membres identifient les normes nécessaires à une coopération fructueuse.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch2')">Voir les résultats</button>
+        <div class="score-display" id="ch2-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch1')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch3')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch2')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH3: Principes P7-P12 ======== -->
+  <div class="chapter-view" id="ch3">
+    <div class="chapter-header">
+      <div class="chapter-tag">STANDARD · SECTION 3 · PARTIE B</div>
+      <h1>Les 12 Principes — P7 à P12</h1>
+      <div class="chapter-desc">Les 6 derniers principes : adaptation, qualité, complexité, risques, résilience et changement.</div>
+    </div>
+
+    <h2>P7 — Adapter en Fonction du Contexte</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : ADAPTATION</strong> — Chaque projet est unique. L'adaptation est itérative et continue.
+    </div>
+    <ul>
+      <li>Adapter = ajustement intentionnel de l'approche, gouvernance et processus</li>
+      <li>Objectif : maximiser la valeur, gérer les contraintes, accélérer le rythme</li>
+      <li>Tenir compte : taille de l'équipe, incertitude, complexité, culture organisationnelle</li>
+      <li>Les politiques de l'organisation fixent les <strong>limites autorisées</strong> de l'adaptation</li>
+    </ul>
+    <div class="box box-green">Bénéfices de l'adaptation : engagement de l'équipe accru, réduction des gaspillages, orientation client, utilisation efficace des ressources.</div>
+
+    <h2>P8 — Garantir la Qualité des Processus et des Livrables</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : QUALITÉ</strong> — Conformité aux critères d'acceptation + aptitude à l'emploi.
+    </div>
+    <p>8 dimensions de la qualité :</p>
+    <div class="two-col">
+      <div class="col-card">
+        <ul>
+          <li><strong>Performance</strong> — fonctionne comme prévu ?</li>
+          <li><strong>Conformité</strong> — adapté à l'usage, répond aux specs ?</li>
+          <li><strong>Fiabilité</strong> — métriques cohérentes ?</li>
+          <li><strong>Résilience</strong> — capable d'affronter les échecs ?</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <ul>
+          <li><strong>Satisfaction</strong> — retour positif utilisateurs ?</li>
+          <li><strong>Uniformité</strong> — cohérent avec d'autres livrables ?</li>
+          <li><strong>Efficacité</strong> — meilleur output avec moins d'input ?</li>
+          <li><strong>Durabilité</strong> — impact positif ESG ?</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>P9 — Se Frayer un Chemin dans la Complexité</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : COMPLEXITÉ</strong> — Utiliser les connaissances humaines et les méthodes pour naviguer en permanence.
+    </div>
+    <ul>
+      <li>La complexité résulte des comportements humains, interactions systémiques, incertitude, ambiguïté</li>
+      <li>Elle peut surgir à n'importe quel moment du projet</li>
+      <li>Approches : réévaluer régulièrement, penser de façon systémique, garder la simplicité</li>
+    </ul>
+
+    <h2>P10 — Optimiser les Réponses aux Risques</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : RISQUE</strong> — Un risque peut être positif (opportunité) ou négatif (menace).
+    </div>
+    <table>
+      <tr><th>Type</th><th>Stratégies pour les MENACES</th><th>Stratégies pour les OPPORTUNITÉS</th></tr>
+      <tr><td><strong>Actives</strong></td><td>Éviter, Transférer, Atténuer</td><td>Exploiter, Partager, Améliorer</td></tr>
+      <tr><td><strong>Passive</strong></td><td colspan="2">Accepter (risque résiduel)</td></tr>
+    </table>
+    <p>L'appétit pour le risque varie selon les parties prenantes. Le risque résiduel = risque restant après les réponses. Le risque secondaire = nouveau risque créé par une réponse.</p>
+
+    <h2>P11 — Accepter l'Adaptabilité et la Résilience</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : RÉSILIENCE</strong> — Capacité à absorber les impacts et à se remettre rapidement d'un revers.
+    </div>
+    <ul>
+      <li><span class="kw">Adaptabilité</span> = capacité à s'adapter au changement</li>
+      <li><span class="kw">Résilience</span> = capacité à absorber les impacts et rebondir</li>
+      <li>Construire la résilience à l'échelle individuelle ET organisationnelle</li>
+      <li>Favoriser un état d'esprit « l'échec est la base de la réussite »</li>
+    </ul>
+
+    <h2>P12 — Favoriser le Changement pour Atteindre l'État Futur Envisagé</h2>
+    <div class="box box-purple">
+      <strong>Mot clé : CHANGEMENT</strong> — Préparer les individus à adopter le changement, pas seulement livrer un produit.
+    </div>
+    <ul>
+      <li>Le changement peut provenir de l'interne ou de l'externe</li>
+      <li>Les parties prenantes ont des niveaux de <span class="kw">tolérance au changement</span> différents</li>
+      <li>La gestion du changement est essentielle pour que les livrables produisent les résultats souhaités</li>
+      <li>Trop de changements simultanés = saturation → résistance accrue</li>
+    </ul>
+
+    <div class="box box-gold">
+      <strong>Les 12 Principes en mémoire :</strong> Gestion · Collaboration · Parties prenantes · Valeur · Système · Leadership · Adaptation · Qualité · Complexité · Risque · Résilience · Changement
+    </div>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Principes P7 à P12</h2>
+        <span class="qcm-badge">6 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/06</div>
+        <div class="q-text">Un projet est en cours d'exécution et l'équipe réalise que l'approche initiale n'est plus adaptée aux nouvelles contraintes du client. Quel principe s'applique en premier ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> P4 — Se concentrer sur la valeur.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> P7 — Adapter en fonction du contexte (de manière itérative).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> P12 — Favoriser le changement pour atteindre l'état futur.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> P8 — Garantir la qualité des processus.</button>
+        </div>
+        <div class="explanation">✅ P7 (Adaptation) s'applique : l'équipe doit ajuster intentionnellement son approche, gouvernance et processus au contexte changeant. L'adaptation est itérative tout au long du cycle de vie.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/06</div>
+        <div class="q-text">Un risque identifié a une probabilité élevée mais un impact très faible. L'équipe décide de ne rien faire et d'accepter les conséquences si le risque se matérialise. Cette stratégie s'appelle :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Atténuation du risque.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Transfert du risque.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Acceptation du risque.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Évitement du risque.</button>
+        </div>
+        <div class="explanation">✅ L'ACCEPTATION est la stratégie passive : on accepte les conséquences si le risque survient, sans action préventive. Appropriée quand le coût de la réponse dépasse l'impact potentiel.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/06</div>
+        <div class="q-text">Quelle dimension de la qualité évalue si le livrable peut se remettre rapidement d'une panne imprévue ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Performance.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Fiabilité.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Résilience.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Uniformité.</button>
+        </div>
+        <div class="explanation">✅ La RÉSILIENCE évalue la capacité du livrable à affronter les échecs imprévus et à se rétablir rapidement. La fiabilité = métriques cohérentes dans le temps. La performance = fonctionnement comme prévu.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/06</div>
+        <div class="q-text">Un risque identifié pourrait, s'il se matérialise, livrer le projet plus rapidement que prévu. Il s'agit d'un :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Risque résiduel.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Risque secondaire.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Risque positif (opportunité).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Risque acceptable.</button>
+        </div>
+        <div class="explanation">✅ Les risques peuvent être POSITIFS (opportunités) ou négatifs (menaces). Pour les opportunités : stratégies d'Exploitation, de Partage ou d'Amélioration. Ne pas oublier que le risque = incertitude (positive ou négative).</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/06</div>
+        <div class="q-text">La différence entre adaptabilité et résilience (P11) est que :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> L'adaptabilité concerne l'organisation et la résilience concerne l'individu.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> L'adaptabilité = capacité à s'adapter aux changements ; la résilience = capacité à absorber les impacts et rebondir après un revers.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> La résilience est une stratégie de risque tandis que l'adaptabilité est un style de management.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Les deux termes sont synonymes dans le contexte du PMBOK 7.</button>
+        </div>
+        <div class="explanation">✅ Adaptabilité = flexibilité pour changer d'approche. Résilience = capacité à absorber les chocs et récupérer. Les deux s'appliquent à l'individu ET à l'organisation.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 06/06</div>
+        <div class="q-text">Selon le principe P12, pourquoi la gestion du changement est-elle critique dans un projet ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Pour minimiser le nombre de demandes de changement soumises.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Pour que les individus adoptent le changement et que les livrables produisent réellement les résultats souhaités.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Pour justifier les dépassements de budget auprès du sponsor.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Pour réduire les risques liés aux modifications de périmètre.</button>
+        </div>
+        <div class="explanation">✅ Un livrable seul ne produit pas la valeur attendue si les utilisateurs ne l'adoptent pas. La gestion du changement vise à préparer les individus à adopter le changement pour atteindre l'état futur envisagé.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch3')">Voir les résultats</button>
+        <div class="score-display" id="ch3-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch2')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch4')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch3')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH4: Parties Prenantes ======== -->
+  <div class="chapter-view" id="ch4">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · DOMAINE 1</div>
+      <h1>D1 — Parties Prenantes</h1>
+      <div class="chapter-desc">Identifier, analyser et engager les parties prenantes pour assurer le succès du projet.</div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>Résultats attendus du domaine :</strong> Relations productives avec les PP · Approbation des objectifs · Satisfaction des PP bénéficiaires · Absence d'impact négatif des PP opposants.
+    </div>
+
+    <h2>🔍 Processus d'Engagement (6 étapes)</h2>
+    <div class="domain-list">
+      <div class="domain-row"><div class="domain-icon">1️⃣</div><div><h4>Identifier</h4><p>Avant et pendant le projet. Internes et externes, favorables et défavorables.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">2️⃣</div><div><h4>Comprendre & Analyser</h4><p>Sentiments, émotions, croyances, valeurs. Analyse de : pouvoir, impact, intérêt, influence, comportement, proximité.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">3️⃣</div><div><h4>Hiérarchiser</h4><p>Prioriser les PP ayant le plus de pouvoir et d'intérêt. Classification dynamique à mettre à jour.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">4️⃣</div><div><h4>Engager</h4><p>Travailler en collaboration : recueil d'exigences, gestion des attentes, résolution de conflits, négociation.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">5️⃣</div><div><h4>Maîtriser</h4><p>Surveiller continuellement l'évolution des PP. Ajuster la stratégie selon les retours.</p></div></div>
+    </div>
+
+    <h2>📡 Types de Communication</h2>
+    <table>
+      <tr><th>Type</th><th>Formelle</th><th>Informelle</th></tr>
+      <tr><td><strong>Verbale</strong></td><td>Présentations, revues de projet, briefings</td><td>Conversations, discussions ponctuelles</td></tr>
+      <tr><td><strong>Écrite</strong></td><td>Rapports d'avancement, documents projet, cas d'affaires</td><td>Notes, e-mails, messagerie, réseaux sociaux</td></tr>
+    </table>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Communication PUSH</h4>
+        <ul><li>Envoi vers la PP (email, rapport, mémo)</li><li>Unilatérale, pas de retour immédiat</li><li>À utiliser délibérément</li></ul>
+      </div>
+      <div class="col-card">
+        <h4>Communication PULL</h4>
+        <ul><li>PP recherche l'info elle-même (intranet, archives)</li><li>Identifier indirectement les préoccupations</li></ul>
+      </div>
+    </div>
+    <p>L'engagement dépasse push/pull → <span class="kw">interaction bidirectionnelle</span> : conversations, réunions, brainstorming.</p>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Parties Prenantes</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">Quand doit commencer l'identification des parties prenantes ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Après la charte du projet approuvée.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Avant ou au tout début du projet, puis continuellement tout au long.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Lors de la phase de planification uniquement.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Uniquement lors des phases d'exécution et de surveillance.</button>
+        </div>
+        <div class="explanation">✅ L'identification débute AVANT même la formation de l'équipe projet et constitue une activité CONTINUE tout au long du projet. Les PP évoluent, de nouvelles arrivent, d'autres partent.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">Un chef de projet envoie un rapport hebdomadaire par email à toutes les parties prenantes. Ce type de communication est :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Une communication Pull informelle.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Une communication Push formelle écrite.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Une communication interactive bidirectionnelle.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Une communication Pull formelle.</button>
+        </div>
+        <div class="explanation">✅ Un rapport envoyé = communication PUSH (on l'envoie vers la PP). Par email = écrite. Dans un contexte formel (rapport d'avancement) = formelle. Push + Formelle + Écrite.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">L'analyse des parties prenantes examine plusieurs aspects. Lequel n'en fait PAS partie ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Le pouvoir et le degré d'influence.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> L'intérêt et la proximité avec le projet.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> La rémunération et les avantages financiers des parties prenantes.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Les croyances, valeurs et comportements.</button>
+        </div>
+        <div class="explanation">✅ L'analyse des PP porte sur : pouvoir, impact, comportement, croyances, attentes, influence, proximité, intérêt. La rémunération des PP n'est PAS un critère d'analyse dans le PMBOK 7.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">Une partie prenante très influente s'oppose au projet. Quelle est la meilleure approche ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> L'exclure des communications pour éviter les conflits.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> S'engager activement avec elle pour comprendre et répondre à ses préoccupations.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Escalader immédiatement au sponsor pour qu'il intervienne.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Attendre que son opposition diminue naturellement avec le temps.</button>
+        </div>
+        <div class="explanation">✅ Selon le principe d'engagement proactif, les PP avec une grande influence mais une vision négative doivent recevoir un engagement ACTIF. Comprendre leurs intérêts et y répondre peut transformer leur opposition.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">Les boucles de rétroaction rapides dans la communication servent principalement à :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Réduire le nombre de réunions nécessaires.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Confirmer la compréhension, identifier les messages nuancés et obtenir des données utiles sur l'acceptation.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Automatiser les rapports d'avancement.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Documenter formellement les décisions prises.</button>
+        </div>
+        <div class="explanation">✅ Les boucles de rétroaction rapides permettent de : confirmer si le message a été compris, savoir si la PP l'accepte, détecter des messages imprévus et obtenir des données complémentaires.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch4')">Voir les résultats</button>
+        <div class="score-display" id="ch4-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch3')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch5')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch4')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH5: Équipe ======== -->
+  <div class="chapter-view" id="ch5">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · DOMAINE 2</div>
+      <h1>D2 — Équipe Projet</h1>
+      <div class="chapter-desc">Culture d'équipe, compétences en leadership, équipes hautement performantes.</div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>Résultats attendus :</strong> Propriété collective des résultats · Culture d'équipe positive · Membres hautement performants · Leadership et compétences interpersonnelles démontrés · Confiance, respect, énergie positive.
+    </div>
+
+    <h2>🎯 Management vs Leadership de l'Équipe</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>⚙️ Management (gestion)</h4>
+        <ul>
+          <li>Planifier, organiser, diriger, contrôler</li>
+          <li>Gérer les processus et ressources</li>
+          <li>Assurer la conformité aux plans</li>
+          <li>Résoudre les problèmes</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🌟 Leadership</h4>
+        <ul>
+          <li>Inspirer une vision partagée</li>
+          <li>Motiver et influencer</li>
+          <li>Coaching et mentorat</li>
+          <li>Gérer les relations et conflits</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>🏆 Équipes Hautement Performantes</h2>
+    <p>Caractéristiques d'une équipe hautement performante :</p>
+    <ul>
+      <li>Communication ouverte et transparente</li>
+      <li>Compréhension commune des objectifs</li>
+      <li>Respect mutuel et confiance</li>
+      <li>Prise de décision collective</li>
+      <li>Apprentissage continu et amélioration</li>
+      <li>Célébration des réussites</li>
+    </ul>
+
+    <h2>🧠 Compétences en Leadership</h2>
+    <table>
+      <tr><th>Compétence</th><th>Description</th></tr>
+      <tr><td><strong>Établir la vision</strong></td><td>Définir clairement où le projet doit mener</td></tr>
+      <tr><td><strong>Pensée critique</strong></td><td>Évaluer situations, options et conséquences</td></tr>
+      <tr><td><strong>Motivation</strong></td><td>Comprendre et activer les facteurs de motivation individuels</td></tr>
+      <tr><td><strong>Compétences interpersonnelles</strong></td><td>Écoute active, empathie, gestion des conflits</td></tr>
+      <tr><td><strong>Intelligence émotionnelle</strong></td><td>Conscience de soi, maîtrise de soi, empathie sociale</td></tr>
+      <tr><td><strong>Prise de décision</strong></td><td>Analyser, évaluer et choisir en temps opportun</td></tr>
+    </table>
+
+    <h2>🔄 Adaptation des Styles de Leadership</h2>
+    <div class="box box-gold">
+      <strong>Modèle Situationnel (Hersey & Blanchard) :</strong> Le style optimal dépend du niveau de compétence ET d'engagement du membre de l'équipe.<br>
+      Directif → Coaching → Soutien → Délégation (selon le niveau de maturité)
+    </div>
+
+    <h2>🌱 Développement de l'Équipe (Modèle Tuckman)</h2>
+    <div class="domain-list">
+      <div class="domain-row"><div class="domain-icon">🌱</div><div><h4>Forming (Formation)</h4><p>Membres se découvrent. Politesse, incertitude. Rôle du leader : directif.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">⚡</div><div><h4>Storming (Turbulences)</h4><p>Conflits émergent. Rivalité, frustration. Rôle du leader : coaching.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🤝</div><div><h4>Norming (Normalisation)</h4><p>Normes établies. Cohésion croissante. Rôle du leader : soutien.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🚀</div><div><h4>Performing (Performance)</h4><p>Équipe autonome et efficace. Rôle du leader : délégation.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🏁</div><div><h4>Adjourning (Dissolution)</h4><p>Fin du projet. Clôture des relations. Reconnaissance des contributions.</p></div></div>
+    </div>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Équipe Projet</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">Selon le modèle de Tuckman, un nouveau membre rejoint une équipe en pleine productivité. Les conflits commencent à réapparaître. Dans quelle phase se trouve l'équipe ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Performing → Adjourning.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> L'équipe retourne en phase Storming.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> L'équipe entre en phase Norming.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> L'équipe reste en Forming.</button>
+        </div>
+        <div class="explanation">✅ L'arrivée d'un nouveau membre peut faire régresser l'équipe vers le STORMING. Les équipes ne progressent pas toujours de façon linéaire dans le modèle Tuckman.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">L'intelligence émotionnelle dans le leadership comprend :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Uniquement la conscience de soi (introspection).</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Conscience de soi, maîtrise de soi, motivation intrinsèque, empathie et compétences sociales.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Les connaissances techniques du secteur d'activité.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> La capacité à analyser des données financières complexes.</button>
+        </div>
+        <div class="explanation">✅ L'IE (Goleman) = 5 composantes : conscience de soi, maîtrise de soi, motivation (intrinsèque), empathie, compétences sociales/relationnelles. Cruciale pour le leadership de projet.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">Un membre de l'équipe est très compétent mais peu motivé. Selon le management situationnel, quel style de leadership s'applique ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Directif — donner des instructions précises.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Coaching — expliquer et développer les compétences.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Soutien — encourager et motiver en valorisant les contributions.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Délégation — laisser le membre travailler en autonomie.</button>
+        </div>
+        <div class="explanation">✅ Compétent mais peu motivé = style SOUTIEN (S3). Le leader encourage, écoute, reconnaît les efforts pour regagner l'engagement. La délégation convient aux membres compétents ET motivés.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">Quelle est la principale différence entre management et leadership d'une équipe projet ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Le management est exercé uniquement par le chef de projet, le leadership par l'équipe entière.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Le management planifie/contrôle/résout ; le leadership inspire/motive/coache vers une vision commune.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Le leadership concerne les projets Agile, le management les projets prédictifs.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Il n'y a aucune différence, les deux termes sont utilisés comme synonymes dans le PMBOK 7.</button>
+        </div>
+        <div class="explanation">✅ Management = planifier, organiser, diriger, contrôler (dimension processus). Leadership = inspirer, motiver, créer la vision, coacher (dimension humaine). Les deux sont nécessaires et complémentaires.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">Les accords d'équipe (team agreements/charter) définissent :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Le budget et l'échéancier de l'équipe projet.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Les paramètres comportementaux et normes de travail établis et respectés collectivement par l'équipe.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Les contrats avec les fournisseurs externes.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> La structure hiérarchique officielle de l'équipe projet.</button>
+        </div>
+        <div class="explanation">✅ Les accords d'équipe = ensemble de paramètres comportementaux et normes de travail (comment on communique, on décide, on gère les conflits). Créés dès le début et maintenus par engagement collectif.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch5')">Voir les résultats</button>
+        <div class="score-display" id="ch5-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch4')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch6')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch5')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH6: Approche & Cycle de vie ======== -->
+  <div class="chapter-view" id="ch6">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · DOMAINE 3</div>
+      <h1>D3 — Approche de Développement & Cycle de Vie</h1>
+      <div class="chapter-desc">Choisir la bonne approche de développement selon le contexte du projet.</div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>Résultats attendus :</strong> Approche adaptée au projet · Livrables dans les délais · Approche adaptative conforme au contexte organisationnel.
+    </div>
+
+    <h2>📊 Les 3 Approches de Développement</h2>
+    <table>
+      <tr><th>Approche</th><th>Caractéristiques</th><th>Exemples</th></tr>
+      <tr>
+        <td><span class="kw">Prédictive</span> (Cascade)</td>
+        <td>Périmètre défini dès le départ · Livraison unique à la fin · Planification détaillée initiale</td>
+        <td>Construction, industrie, infrastructure</td>
+      </tr>
+      <tr>
+        <td><span class="kw-gold">Adaptative</span> (Agile)</td>
+        <td>Périmètre évolutif · Livraisons itératives · Planification juste-à-temps</td>
+        <td>Développement logiciel, innovation</td>
+      </tr>
+      <tr>
+        <td><span class="kw-g">Hybride</span></td>
+        <td>Combinaison des deux · Certaines phases prédictives, d'autres adaptatives</td>
+        <td>Projets avec composantes physiques + software</td>
+      </tr>
+    </table>
+
+    <h2>🔄 Cadences de Livraison</h2>
+    <div class="domain-list">
+      <div class="domain-row"><div class="domain-icon">1️⃣</div><div><h4>Livraison unique</h4><p>Un seul livrable à la fin du projet. (prédictive typique)</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🔁</div><div><h4>Livraisons multiples</h4><p>Plusieurs livrables à des moments définis. Réduction du risque.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🌀</div><div><h4>Itérative</h4><p>Prototypes successifs améliorés à chaque itération. Feedback fréquent.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">📦</div><div><h4>Incrémentale</h4><p>Fonctionnalités ajoutées progressivement sur un produit de base. MVP d'abord.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🔀</div><div><h4>Continue</h4><p>Livraison en flux continu (kanban). Adapté aux opérations de maintenance.</p></div></div>
+    </div>
+
+    <h2>🎯 Critères de Sélection de l'Approche</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>→ Prédictive si :</h4>
+        <ul>
+          <li>Exigences stables et bien définies</li>
+          <li>Contraintes réglementaires fortes</li>
+          <li>Technologies matures et connues</li>
+          <li>Faible tolérance au changement</li>
+          <li>Risques bien identifiables à l'avance</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>→ Adaptative si :</h4>
+        <ul>
+          <li>Exigences instables ou évolutives</li>
+          <li>Besoin de feedback client fréquent</li>
+          <li>Innovation et expérimentation</li>
+          <li>Technologies nouvelles</li>
+          <li>Tolérance au changement élevée</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>📅 Phases du Cycle de Vie</h2>
+    <p>Le cycle de vie = ensemble des phases que traverse un projet. Il peut être séquentiel, chevauchant, ou itératif. Les phases peuvent inclure :</p>
+    <ul>
+      <li>Phase de démarrage / faisabilité</li>
+      <li>Phase de conception / planification</li>
+      <li>Phase d'exécution / réalisation</li>
+      <li>Phase de test / validation</li>
+      <li>Phase de clôture / transition</li>
+    </ul>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Approche & Cycle de Vie</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">Un projet de construction d'autoroute avec des exigences strictement définies et des contraintes réglementaires importantes devrait utiliser :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="true"><span class="opt-letter">A</span> Une approche prédictive (en cascade).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Une approche adaptative (Agile).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Une approche itérative pure avec des sprints de 2 semaines.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Une approche Kanban en flux continu.</button>
+        </div>
+        <div class="explanation">✅ Exigences stables + contraintes réglementaires + technologies matures → PRÉDICTIF. L'approche Agile est inadaptée quand les exigences ne peuvent pas évoluer.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">La livraison incrémentale diffère de la livraison itérative car :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> L'incrémental est plus lent que l'itératif.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> L'incrémental ajoute des fonctionnalités successivement ; l'itératif améliore le même livrable via des cycles de feedback.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> L'itératif nécessite un périmètre fixe, l'incrémental un périmètre ouvert.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Il n'y a aucune différence pratique entre les deux.</button>
+        </div>
+        <div class="explanation">✅ Incrémental = ajout de fonctionnalités sur un produit de base (MVP puis enrichissement). Itératif = prototype amélioré à chaque cycle selon les retours. Scrum = itératif ET incrémental.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">Une approche hybride est appropriée lorsque :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Le projet est trop petit pour justifier une approche Agile.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Certaines parties du projet ont des exigences stables (prédictif) et d'autres sont incertaines (adaptatif).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> L'organisation n'a pas de méthodologie établie.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Le chef de projet n'est pas certifié Agile.</button>
+        </div>
+        <div class="explanation">✅ L'approche hybride mélange intentionnellement prédictif et adaptatif. Ex : infrastructure physique (prédictif) + logiciel embarqué (adaptatif) dans un même projet IoT.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">Le cycle de vie d'un projet est :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Toujours identique quel que soit le type de projet.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> L'ensemble des phases que traverse un projet, pouvant être séquentiel, chevauchant ou itératif selon le contexte.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Identique au cycle de vie du produit.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Exclusivement défini par la méthode Agile utilisée.</button>
+        </div>
+        <div class="explanation">✅ Le cycle de vie du projet ≠ cycle de vie du produit. Le projet a un début et une fin ; le produit continue après le projet. Le cycle de vie est adapté au contexte.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">La cadence de livraison "continue" (flux continu) est la plus adaptée pour :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Un projet de construction de bâtiment.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Un projet de développement d'un nouveau produit hardware.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Des opérations de maintenance ou d'amélioration continue d'un produit existant.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Un projet de fusion-acquisition complexe.</button>
+        </div>
+        <div class="explanation">✅ La livraison continue (Kanban) est adaptée aux flux de travail continus : maintenance logicielle, support, amélioration continue. Pas de sprints définis, priorité au flux.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch6')">Voir les résultats</button>
+        <div class="score-display" id="ch6-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch5')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch7')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch6')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH7: Planification ======== -->
+  <div class="chapter-view" id="ch7">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · DOMAINE 4</div>
+      <h1>D4 — Planification</h1>
+      <div class="chapter-desc">Organiser et coordonner les activités pour réaliser les livrables et résultats du projet.</div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>Résultats attendus :</strong> Planification suffisante pour avancer · Informations suffisantes pour les PP · Estimation précise · Plans adaptés selon les informations disponibles.
+    </div>
+
+    <h2>📋 Variables de Planification</h2>
+
+    <h3>Périmètre & Exigences</h3>
+    <ul>
+      <li><span class="kw">Exigences</span> = conditions/capacités que le projet/produit doit satisfaire</li>
+      <li>Types : fonctionnelles, non-fonctionnelles, qualité, réglementaires</li>
+      <li>WBS (Work Breakdown Structure) = décomposition hiérarchique du périmètre</li>
+      <li>Backlog (approche adaptative) = liste priorisée des exigences à réaliser</li>
+    </ul>
+
+    <h3>Calendrier & Durée</h3>
+    <ul>
+      <li>Séquence des activités → Réseau de dépendances (PDM)</li>
+      <li>Méthode du chemin critique (CPM) — identifie la séquence la plus longue</li>
+      <li>Marge totale vs marge libre</li>
+      <li>Compression : <span class="kw">Accélération (Crashing)</span> = ajout ressources · <span class="kw">Chevauchement (Fast tracking)</span> = parallélisation</li>
+    </ul>
+
+    <h3>Budget & Coûts</h3>
+    <ul>
+      <li>Estimation : Analogique, Paramétrique, Par le bas (bottom-up), À 3 points (PERT)</li>
+      <li>Réserves : <span class="kw-gold">Réserves pour aléas</span> (risques identifiés) vs <span class="kw-gold">Réserves de management</span> (risques inconnus)</li>
+      <li>Courbe en S = évolution cumulée des coûts dans le temps</li>
+    </ul>
+
+    <h2>📊 Méthode de la Valeur Acquise (EVA)</h2>
+    <div class="box box-gold">
+      Technique clé pour l'examen PMP !
+    </div>
+    <table>
+      <tr><th>Sigle</th><th>Nom</th><th>Description</th></tr>
+      <tr><td><strong>PV</strong></td><td>Valeur planifiée</td><td>Coût budgété du travail planifié à ce jour</td></tr>
+      <tr><td><strong>EV</strong></td><td>Valeur acquise</td><td>Coût budgété du travail réellement effectué</td></tr>
+      <tr><td><strong>AC</strong></td><td>Coût réel</td><td>Coût réel du travail effectué</td></tr>
+      <tr><td><strong>CV</strong></td><td>Écart de coût</td><td>EV – AC (positif = sous budget)</td></tr>
+      <tr><td><strong>SV</strong></td><td>Écart de délai</td><td>EV – PV (positif = en avance)</td></tr>
+      <tr><td><strong>CPI</strong></td><td>Indice performance coût</td><td>EV/AC (>1 = efficace)</td></tr>
+      <tr><td><strong>SPI</strong></td><td>Indice performance délai</td><td>EV/PV (>1 = en avance)</td></tr>
+      <tr><td><strong>BAC</strong></td><td>Budget à l'achèvement</td><td>Budget total planifié</td></tr>
+      <tr><td><strong>EAC</strong></td><td>Coût estimé à l'achèvement</td><td>BAC/CPI (prévision finale)</td></tr>
+    </table>
+
+    <h2>🔧 Autres Variables de Planification</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Ressources physiques</h4>
+        <ul><li>Équipements, matériaux, installations</li><li>Planification de l'approvisionnement</li><li>Gestion des stocks</li></ul>
+      </div>
+      <div class="col-card">
+        <h4>Communication & Métriques</h4>
+        <ul><li>Plan de communication (qui, quoi, quand, comment)</li><li>KPI et métriques de performance</li><li>Référentiels de base (baseline)</li></ul>
+      </div>
+    </div>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Planification</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">Un projet a : PV = 100 000€, EV = 80 000€, AC = 90 000€. Quel est l'état du projet ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> En avance et sous budget.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> En retard et au-dessus du budget.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> En retard mais sous budget.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> En avance mais au-dessus du budget.</button>
+        </div>
+        <div class="explanation">✅ SV = EV-PV = 80k-100k = -20k (EN RETARD). CV = EV-AC = 80k-90k = -10k (AU-DESSUS DU BUDGET). CPI = 80/90 = 0,89 &lt; 1. SPI = 80/100 = 0,8 &lt; 1.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">L'accélération (crashing) d'un projet consiste à :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="true"><span class="opt-letter">A</span> Ajouter des ressources sur le chemin critique pour réduire la durée, au prix d'un coût supplémentaire.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Paralléliser des activités normalement séquentielles, augmentant le risque.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Réduire le périmètre du projet pour respecter les délais.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Remplacer des ressources coûteuses par des ressources moins chères.</button>
+        </div>
+        <div class="explanation">✅ CRASHING = ajout de ressources sur le chemin critique → réduction de durée + augmentation de coût. FAST TRACKING = parallélisation → réduction de durée + augmentation de risque.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">La réserve pour aléas dans un budget projet est destinée à couvrir :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="true"><span class="opt-letter">A</span> Les risques IDENTIFIÉS et leurs impacts potentiels sur le budget.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Les risques inconnus et imprévus (unk-unks).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Les changements de périmètre demandés par le client.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Les dépassements de budget des sous-traitants.</button>
+        </div>
+        <div class="explanation">✅ Réserve pour ALÉAS = risques identifiés (connus-inconnus). Réserve de MANAGEMENT = risques non identifiés (inconnus-inconnus). La distinction est cruciale à l'examen.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">Si le CPI d'un projet est de 0,75, cela signifie que :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Pour chaque euro dépensé, 1,33€ de travail est réalisé.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Pour chaque euro dépensé, seulement 0,75€ de travail est réalisé (au-dessus du budget).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Le projet sera terminé 25% plus tôt que prévu.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Le projet a dépensé 75% de son budget total.</button>
+        </div>
+        <div class="explanation">✅ CPI = EV/AC. CPI = 0,75 signifie que pour 1€ dépensé, on n'obtient que 0,75€ de valeur → dépassement budgétaire. CPI &lt; 1 = au-dessus du budget. CPI &gt; 1 = sous budget.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">La méthode d'estimation PERT utilise :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Des données historiques de projets similaires uniquement.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Trois estimations : optimiste (O), pessimiste (P) et la plus probable (M). PERT = (O + 4M + P) / 6.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Une décomposition du travail du bas vers le haut (bottom-up).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Des paramètres mathématiques (coût/unité) pour estimer les coûts.</button>
+        </div>
+        <div class="explanation">✅ PERT = Program Evaluation and Review Technique. Formule : (O + 4M + P) / 6. C'est une estimation à 3 points qui tient compte de l'incertitude. L'analogique utilise l'historique ; le paramétrique utilise des paramètres.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch7')">Voir les résultats</button>
+        <div class="score-display" id="ch7-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch6')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch8')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch7')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH8: Travail du projet ======== -->
+  <div class="chapter-view" id="ch8">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · DOMAINE 5</div>
+      <h1>D5 — Travail du Projet</h1>
+      <div class="chapter-desc">Gérer les processus, ressources et communications pour l'exécution quotidienne du projet.</div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>Résultats attendus :</strong> Performance efficace et efficiente · Flux de travail adapté · Communication et engagement appropriés · Gestion des ressources physiques · Approvisionnement maîtrisé · Capacité d'apprentissage.
+    </div>
+
+    <h2>⚙️ Processus du Projet</h2>
+    <p>Le travail du projet implique d'établir et de maintenir des processus efficaces :</p>
+    <ul>
+      <li><span class="kw">Maîtrise des changements</span> — tout changement doit être évalué, approuvé ou rejeté formellement</li>
+      <li><span class="kw">Collecte des leçons apprises</span> — tout au long du projet, pas seulement à la fin</li>
+      <li><span class="kw">Communication et engagement</span> — maintenir les PP informées et impliquées</li>
+    </ul>
+
+    <h2>⚖️ Équilibrage des Contraintes Opposées</h2>
+    <div class="box box-gold">
+      <strong>Triangle des contraintes :</strong> Périmètre · Coût · Délai (+ Qualité, Risque, Satisfaction). Modifier l'une affecte les autres.
+    </div>
+
+    <h2>🔄 Maîtrise des Changements</h2>
+    <p>Tout changement suit un processus formel :</p>
+    <ol>
+      <li>Soumission de la demande de changement</li>
+      <li>Évaluation de l'impact (coût, délai, périmètre, risque, qualité)</li>
+      <li>Décision par le comité de maîtrise des changements (CCB)</li>
+      <li>Mise à jour des plans et communications</li>
+      <li>Mise en œuvre et suivi</li>
+    </ol>
+
+    <h2>📦 Gestion des Ressources Physiques</h2>
+    <ul>
+      <li>Matériaux, équipements, installations, infrastructure</li>
+      <li>Suivi de l'utilisation et prévention des gaspillages</li>
+      <li>Gestion des stocks et de la chaîne d'approvisionnement</li>
+    </ul>
+
+    <h2>🛒 Collaboration dans l'Approvisionnement</h2>
+    <table>
+      <tr><th>Type de contrat</th><th>Caractéristique</th><th>Risque client</th></tr>
+      <tr><td><strong>FFP (Prix fixe ferme)</strong></td><td>Prix fixe quelle que soit la réalité</td><td>Faible (vendeur assume)</td></tr>
+      <tr><td><strong>FPIF (Prix fixe + intéressement)</strong></td><td>Prix fixe + bonus/malus sur performance</td><td>Faible à modéré</td></tr>
+      <tr><td><strong>CPFF (Coût + honoraires fixes)</strong></td><td>Remboursement coûts réels + honoraires fixes</td><td>Élevé</td></tr>
+      <tr><td><strong>CPIF (Coût + intéressement)</strong></td><td>Remboursement coûts + bonus si objectifs atteints</td><td>Modéré</td></tr>
+      <tr><td><strong>T&M (Temps & Matériaux)</strong></td><td>Payé à l'heure + matériaux</td><td>Élevé (si non plafonné)</td></tr>
+    </table>
+
+    <h2>🔧 Suivi du Nouveau Travail et des Changements</h2>
+    <ul>
+      <li>Distinguer périmètre approuvé vs travail non autorisé (scope creep)</li>
+      <li>Le <span class="kw-g">gold plating</span> = ajouter des fonctionnalités non demandées → à éviter</li>
+    </ul>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Travail du Projet</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">Un développeur ajoute des fonctionnalités "bonus" non demandées par le client car il pense qu'elles seraient utiles. Ce comportement s'appelle :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Dérive du périmètre (scope creep).</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Gold plating — ajout de fonctionnalités non approuvées, à éviter.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Amélioration continue (kaizen).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Une pratique normale dans un environnement Agile.</button>
+        </div>
+        <div class="explanation">✅ GOLD PLATING = ajouter des extras non demandés. Problèmes : consomme des ressources, risques non évalués, non approuvé par le client. À distinguer du SCOPE CREEP = modifications du périmètre non contrôlées venant du client.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">Pour un projet innovant dont le périmètre est difficile à définir à l'avance, quel type de contrat est le plus approprié ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> FFP (Prix Fixe Ferme) — le prix est fixé une fois pour toutes.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> T&M (Temps et Matériaux) ou CPFF (Coût + Honoraires Fixes).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> FPIF (Prix Fixe + Intéressement) — incite le vendeur à la performance.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Aucun contrat n'est possible si le périmètre est incertain.</button>
+        </div>
+        <div class="explanation">✅ Pour un périmètre incertain (innovation, R&D) → T&M ou coût remboursable (CPFF, CPIF). FFP est risqué pour le vendeur si le périmètre est flou. Le client assume plus de risque avec les contrats remboursables.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">Quand les leçons apprises doivent-elles être collectées ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Uniquement lors de la réunion de clôture du projet.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Tout au long du projet, pas seulement à la fin.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Seulement lorsqu'un problème majeur survient.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> À la fin de chaque phase uniquement.</button>
+        </div>
+        <div class="explanation">✅ Les leçons apprises sont collectées CONTINUELLEMENT tout au long du projet (pas seulement à la clôture) pour permettre des ajustements en temps réel et enrichir la base de connaissances organisationnelle.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">Un contrat FFP (Prix Fixe Ferme) place la majorité du risque financier sur :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Le client (acheteur).</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Le vendeur (prestataire).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Les deux parties de manière égale.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Le PMO de l'organisation cliente.</button>
+        </div>
+        <div class="explanation">✅ FFP = le vendeur s'engage sur un prix fixe. Si les coûts réels dépassent, c'est le vendeur qui absorbe le dépassement. Risque MAX pour le vendeur, risque MIN pour le client.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">Un changement de périmètre important est demandé en cours d'exécution. Quelle est la première action du chef de projet ?</div>
+        <div name="options" class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Mettre en œuvre le changement immédiatement pour ne pas bloquer l'équipe.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Refuser le changement car le projet est en cours d'exécution.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Évaluer l'impact du changement sur le coût, délai, périmètre et risque, puis le soumettre au CCB.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Informer le client que tout changement en cours d'exécution est interdit.</button>
+        </div>
+        <div class="explanation">✅ Tout changement doit suivre le processus de maîtrise des changements : 1) Évaluer l'impact 2) Soumettre au CCB (Comité de Maîtrise des Changements) 3) Décision formelle 4) Mettre à jour les plans si approuvé.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch8')">Voir les résultats</button>
+        <div class="score-display" id="ch8-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch7')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch9')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch8')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH9: Livraison ======== -->
+  <div class="chapter-view" id="ch9">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · DOMAINE 6</div>
+      <h1>D6 — Livraison & Qualité</h1>
+      <div class="chapter-desc">Réaliser des livrables qui créent de la valeur et satisfont aux exigences de qualité.</div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>Résultats attendus :</strong> Compréhension des exigences · Livrables conformes aux critères d'acceptation · Bénéfices réalisés · Qualité maintenue tout au long du projet.
+    </div>
+
+    <h2>💎 Création de Valeur</h2>
+    <p>La livraison doit être axée sur les <span class="kw">résultats</span> (outcomes) et non uniquement sur les <span class="kw">livrables</span> (outputs). Un livrable fourni mais non utilisé ne crée pas de valeur.</p>
+
+    <h2>🏗 Les Livrables</h2>
+    <ul>
+      <li>Produits, services ou résultats uniques du projet</li>
+      <li>Critères d'acceptation définis avec les PP avant l'exécution</li>
+      <li>Vérification vs Validation :
+        <ul>
+          <li><span class="kw">Vérification</span> = "construit-on le produit correctement ?" (conformité aux specs)</li>
+          <li><span class="kw">Validation</span> = "construit-on le bon produit ?" (répond aux besoins réels)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>🔍 Qualité</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Assurance Qualité (QA)</h4>
+        <ul>
+          <li>Processus-oriented</li>
+          <li>Prévenir les défauts</li>
+          <li>Audits de processus</li>
+          <li>Proactive</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Contrôle Qualité (QC)</h4>
+        <ul>
+          <li>Produit-oriented</li>
+          <li>Identifier les défauts</li>
+          <li>Inspection des livrables</li>
+          <li>Reactive</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Outils Qualité (7 outils de base)</h3>
+    <ul>
+      <li><span class="kw">Diagramme cause-effet</span> (Ishikawa / arête de poisson) — causes racines</li>
+      <li><span class="kw">Diagramme de Pareto</span> — 80% des problèmes = 20% des causes</li>
+      <li><span class="kw">Graphique de contrôle</span> — surveiller la stabilité d'un processus</li>
+      <li><span class="kw">Histogramme</span> — distribution de fréquence</li>
+      <li><span class="kw">Diagramme de dispersion</span> — corrélation entre variables</li>
+      <li><span class="kw">Diagramme de flux</span> — séquence des étapes</li>
+      <li><span class="kw">Feuille de relevé</span> — collecte structurée de données</li>
+    </ul>
+
+    <div class="box box-gold">
+      <strong>Coût de la qualité (COQ) :</strong>
+      Coûts de CONFORMITÉ (prévention + évaluation) vs Coûts de NON-CONFORMITÉ (défaillances internes + externes). Prévenir est toujours moins coûteux que corriger.
+    </div>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Livraison & Qualité</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">L'assurance qualité (QA) diffère du contrôle qualité (QC) car :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="true"><span class="opt-letter">A</span> La QA est préventive et orientée processus ; la QC est corrective et orientée produit/livrable.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> La QC est planifiée en amont, la QA intervient pendant l'exécution.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> La QA est réalisée par des experts externes, la QC par l'équipe interne.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> La QC garantit la conformité aux normes ISO, la QA aux exigences client.</button>
+        </div>
+        <div class="explanation">✅ QA (Assurance Qualité) = processus orienté, préventif, audits → s'assurer que les bons processus sont en place. QC (Contrôle Qualité) = produit orienté, détectif, inspections → vérifier que les livrables sont conformes.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">La vérification d'un livrable répond à la question :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="true"><span class="opt-letter">A</span> "Construisons-nous le produit correctement ?" (conformité aux spécifications).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> "Construisons-nous le bon produit ?" (répond aux besoins réels).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> "Le produit sera-t-il livré dans les délais ?"</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> "Le budget du projet est-il respecté ?"</button>
+        </div>
+        <div class="explanation">✅ VÉRIFICATION = conformité aux specs techniques (fait correctement ?). VALIDATION = répond aux besoins réels (bon produit ?). La validation implique généralement le client final.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">Le principe de Pareto dans la qualité signifie que :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> 100% des défauts proviennent de 100% des causes.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Environ 80% des problèmes proviennent de 20% des causes — se concentrer sur les causes prioritaires.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> 80% du budget doit être alloué à la qualité.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> 20% de l'équipe réalise 80% du travail de qualité.</button>
+        </div>
+        <div class="explanation">✅ La règle de Pareto (80/20) : 80% des problèmes = 20% des causes. Prioriser les causes majeures maximise l'efficacité des actions correctives. Le diagramme de Pareto visualise cette distribution.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">Le coût de la non-qualité inclut :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Les formations qualité et les audits de processus.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Les tests et inspections de produits finis.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> Les retouches, retravailler, garanties, pertes de clients et pénalités.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Les outils et équipements de contrôle qualité.</button>
+        </div>
+        <div class="explanation">✅ Coûts de CONFORMITÉ = prévention (formations, planification) + évaluation (tests, audits). Coûts de NON-CONFORMITÉ = défaillances internes (retouches, rebuts) + défaillances externes (garanties, pénalités, perte de clients).</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">Quel outil qualité permet d'identifier les causes racines d'un problème ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="true"><span class="opt-letter">A</span> Le diagramme cause-effet (Ishikawa / arête de poisson).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Le graphique de contrôle.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> L'histogramme.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Le diagramme de dispersion.</button>
+        </div>
+        <div class="explanation">✅ Ishikawa (ou arête de poisson, ou cause-effet) = identifier les causes racines d'un problème. Graphique de contrôle = surveiller la stabilité d'un processus. Histogramme = distribution de fréquence.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch9')">Voir les résultats</button>
+        <div class="score-display" id="ch9-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch8')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch10')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch9')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH10: Mesure ======== -->
+  <div class="chapter-view" id="ch10">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · DOMAINE 7</div>
+      <h1>D7 — Mesure & Performance</h1>
+      <div class="chapter-desc">Évaluer la performance du projet et prendre des décisions basées sur des données.</div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>Résultats attendus :</strong> Compréhension fiable de l'avancement · Données pertinentes pour les décisions · Réponses appropriées aux problèmes · Amélioration continue.
+    </div>
+
+    <h2>📊 Mise en Place de Mesures Efficaces</h2>
+    <p>Objectif des mesures = savoir <em>réellement</em> où en est le projet pour prendre de bonnes décisions.</p>
+    <ul>
+      <li>Les mesures doivent être <span class="kw">liées aux objectifs</span> du projet</li>
+      <li>Trop de mesures = bruit. Les mesures doivent être pertinentes</li>
+      <li>Les KPI doivent être SMART : Spécifiques, Mesurables, Atteignables, Réalistes, Temporels</li>
+    </ul>
+
+    <h2>📈 Éléments à Mesurer</h2>
+    <table>
+      <tr><th>Catégorie</th><th>Exemples de métriques</th></tr>
+      <tr><td><strong>Livrables</strong></td><td>Taux de défauts, conformité aux exigences, nombre de livraisons</td></tr>
+      <tr><td><strong>Livraison</strong></td><td>% de travail complété, vélocité (Agile), débit</td></tr>
+      <tr><td><strong>Performance baselines</strong></td><td>Écart de coût (CV), écart de délai (SV), CPI, SPI</td></tr>
+      <tr><td><strong>Ressources</strong></td><td>Utilisation des ressources, coût par ressource</td></tr>
+      <tr><td><strong>Parties prenantes</strong></td><td>Satisfaction client, NPS, niveau d'engagement</td></tr>
+      <tr><td><strong>Risques</strong></td><td>Nombre de risques identifiés, taux d'occurrence, exposition au risque</td></tr>
+    </table>
+
+    <h2>📉 Présentation des Informations</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Tableaux de bord (Dashboards)</h4>
+        <ul>
+          <li>Vue synthétique de la performance</li>
+          <li>RAG status (Rouge/Amber/Vert)</li>
+          <li>Actualisés en temps quasi-réel</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Indicateurs visuels</h4>
+        <ul>
+          <li>Graphiques en burndown/burnup</li>
+          <li>Diagrammes Gantt</li>
+          <li>Courbes en S (EVA)</li>
+          <li>Diagrammes de flux cumulatifs</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>⚠️ Difficultés de Mesure</h2>
+    <ul>
+      <li><span class="kw-gold">Biais de confirmation</span> — ne mesurer que ce qui confirme les attentes</li>
+      <li><span class="kw-gold">Effet Hawthorne</span> — les gens changent de comportement lorsqu'ils savent qu'ils sont mesurés</li>
+      <li><span class="kw-gold">Vanity metrics</span> — métriques impressionnantes mais peu actionnables</li>
+      <li><span class="kw-gold">Métriques retardées</span> — indiquent ce qui s'est passé, pas ce qui va se passer</li>
+    </ul>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Mesure & Performance</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">Un indicateur clé de performance (KPI) doit être :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Le plus nombreux possible pour couvrir tous les aspects du projet.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> SMART : Spécifique, Mesurable, Atteignable, Réaliste et Temporel, lié aux objectifs du projet.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Uniquement financier pour refléter la santé budgétaire.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Défini uniquement par le sponsor et non modifiable.</button>
+        </div>
+        <div class="explanation">✅ Les KPI doivent être SMART et directement liés aux objectifs du projet. Trop de métriques crée du bruit. Les métriques doivent être actionnables et aider à prendre de meilleures décisions.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">Le "burndown chart" dans un projet Agile montre :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> L'accumulation de valeur livrée au fil des sprints.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> La quantité de travail restant à faire dans le sprint ou la release.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> L'évolution du budget consommé par rapport au budget planifié.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Le nombre de bugs identifiés et corrigés par sprint.</button>
+        </div>
+        <div class="explanation">✅ Burndown chart = travail RESTANT (qui "brûle" vers zéro). Burnup chart = travail ACCOMPLI (qui monte vers l'objectif). Deux graphiques complémentaires dans les environnements Agile.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">L'effet Hawthorne dans la mesure de performance signifie que :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Les mesures retardées ne reflètent pas la réalité actuelle.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Les personnes modifient leur comportement lorsqu'elles savent qu'elles sont observées ou mesurées.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Les métriques impressionnantes ne sont pas toujours actionnables.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Les équipes ne mesurent que ce qui confirme leurs attentes positives.</button>
+        </div>
+        <div class="explanation">✅ L'effet Hawthorne : être observé modifie le comportement (généralement en mieux à court terme). Cela peut fausser les mesures. Le biais de confirmation = ne mesurer que ce qui va dans le sens souhaité.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">Un tableau de bord de projet (dashboard) avec des statuts RAG (Rouge/Amber/Vert) est utile car :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="true"><span class="opt-letter">A</span> Il fournit une vue synthétique rapide de l'état du projet pour les décideurs.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> Il remplace le rapport détaillé d'avancement.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Il est uniquement utile pour les projets de grande taille.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Il automatiquement génère les actions correctives nécessaires.</button>
+        </div>
+        <div class="explanation">✅ Le tableau de bord RAG offre une vue synthétique immédiate. Les décideurs voient rapidement ce qui est OK (vert), à surveiller (amber) ou critique (rouge). Il complète, ne remplace pas, les rapports détaillés.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">La vélocité dans un projet Agile mesure :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> La vitesse maximale théorique de l'équipe.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> La quantité de travail (points de story) réellement complétée par l'équipe lors d'un sprint.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Le nombre de membres actifs dans l'équipe.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> La durée moyenne entre la création et la résolution d'un bug.</button>
+        </div>
+        <div class="explanation">✅ La vélocité = quantité de travail réalisée par sprint (en story points ou d'autres unités). Elle sert à prévoir combien de sprints seront nécessaires pour compléter le backlog restant.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch10')">Voir les résultats</button>
+        <div class="score-display" id="ch10-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch9')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch11')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch10')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH11: Incertitude ======== -->
+  <div class="chapter-view" id="ch11">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · DOMAINE 8</div>
+      <h1>D8 — Incertitude & Risque</h1>
+      <div class="chapter-desc">Identifier, analyser et répondre aux menaces et opportunités du projet.</div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>Résultats attendus :</strong> Conscience de l'environnement d'incertitude · Proactivité vis-à-vis des menaces et opportunités · Réserves adéquates · Plan de gestion des risques appliqué.
+    </div>
+
+    <h2>🌫 Types d'Incertitude</h2>
+    <div class="domain-list">
+      <div class="domain-row"><div class="domain-icon">❓</div><div><h4>Incertitude générale</h4><p>Manque d'informations sur l'environnement, les exigences ou le contexte.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🌫</div><div><h4>Ambiguïté</h4><p>Manque de clarté sur les exigences. Incertitude sur ce qui est attendu.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🕸</div><div><h4>Complexité</h4><p>Nombreuses interactions entre composantes du système. Comportements émergents imprévisibles.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">⚡</div><div><h4>Volatilité (VUCA)</h4><p>Changements rapides et imprévisibles de l'environnement.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">⚠️</div><div><h4>Risque</h4><p>Événement incertain pouvant avoir un effet positif ou négatif sur les objectifs.</p></div></div>
+    </div>
+
+    <div class="box box-gold">
+      <strong>VUCA :</strong> Volatilité (Volatility), Incertitude (Uncertainty), Complexité (Complexity), Ambiguïté (Ambiguity) — contexte dans lequel les projets sont réalisés aujourd'hui.
+    </div>
+
+    <h2>⚠️ Gestion des Risques</h2>
+    <p>Les étapes du processus de gestion des risques :</p>
+    <ol>
+      <li><span class="kw">Planifier</span> la gestion des risques</li>
+      <li><span class="kw">Identifier</span> les risques (registre des risques)</li>
+      <li><span class="kw">Analyser qualitativement</span> (probabilité × impact = score)</li>
+      <li><span class="kw">Analyser quantitativement</span> (Monte Carlo, arbres de décision, valeur monétaire attendue)</li>
+      <li><span class="kw">Planifier les réponses</span> aux risques</li>
+      <li><span class="kw">Mettre en œuvre</span> les réponses</li>
+      <li><span class="kw">Surveiller</span> les risques</li>
+    </ol>
+
+    <h2>🎯 Stratégies de Réponse aux Risques</h2>
+    <table>
+      <tr><th>Stratégie</th><th>MENACES</th><th>OPPORTUNITÉS</th></tr>
+      <tr><td>Agressive</td><td>Éviter — éliminer la menace</td><td>Exploiter — s'assurer que l'opportunité se matérialise</td></tr>
+      <tr><td>Transfert</td><td>Transférer — passer à un tiers (assurance, contrat)</td><td>Partager — associer un tiers pour saisir l'opportunité</td></tr>
+      <tr><td>Modérée</td><td>Atténuer — réduire la probabilité ou l'impact</td><td>Améliorer — augmenter la probabilité ou l'impact positif</td></tr>
+      <tr><td>Passive</td><td colspan="2">Accepter — reconnaître et ne pas agir (actif = plan de secours)</td></tr>
+      <tr><td>Escalade</td><td colspan="2">Escalader — dépasse le niveau du projet, transférer au programme/portefeuille</td></tr>
+    </table>
+
+    <h2>🔢 Valeur Monétaire Attendue (VME/EMV)</h2>
+    <div class="box box-green">
+      VME = Probabilité × Impact monetaire<br>
+      Ex : Risque de 30% de chance de coûter 50k€ → VME = 0,30 × -50 000 = -15 000€ (à provisionner en réserve)
+    </div>
+
+    <h2>📊 Appétit pour le Risque</h2>
+    <ul>
+      <li><span class="kw">Appétit pour le risque</span> = niveau de risque que l'organisation est prête à accepter</li>
+      <li><span class="kw">Tolérance au risque</span> = variation acceptable autour des objectifs</li>
+      <li><span class="kw">Seuil de risque</span> = point au-delà duquel le risque est inacceptable</li>
+    </ul>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Incertitude & Risque</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">La matrice probabilité × impact est utilisée lors de :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> L'identification des risques.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> L'analyse qualitative des risques pour prioriser les risques.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> La planification des réponses aux risques.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> La surveillance et maîtrise des risques.</button>
+        </div>
+        <div class="explanation">✅ La matrice P×I est l'outil principal de l'ANALYSE QUALITATIVE des risques. Elle permet de prioriser les risques (fort/moyen/faible) avant de choisir les réponses appropriées.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">L'achat d'une assurance pour couvrir le risque d'un sinistre est un exemple de :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Atténuation du risque.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Transfert du risque.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Acceptation active du risque.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Évitement du risque.</button>
+        </div>
+        <div class="explanation">✅ L'ASSURANCE = transfert du risque financier à un tiers. Transfert = passer la responsabilité financière à un tiers (assurance, clause contractuelle). L'atténuation = réduire la probabilité/impact sans transférer.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">Un risque résiduel est :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Un risque créé par la mise en œuvre d'une réponse à un risque.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Le risque qui subsiste après la mise en œuvre des réponses planifiées.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Un risque identifié mais non encore analysé.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Un risque ignoré car sa probabilité est trop faible.</button>
+        </div>
+        <div class="explanation">✅ Risque RÉSIDUEL = ce qui reste après les réponses. Risque SECONDAIRE = nouveau risque créé PAR la réponse. Ex : Fast-tracking (réponse) crée un risque secondaire de qualité réduite.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">La méthode Monte Carlo est utilisée pour :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Identifier les parties prenantes clés d'un projet.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> L'analyse quantitative des risques via simulation de milliers de scénarios possibles.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Prioriser les risques par probabilité et impact.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Estimer le coût des ressources humaines.</button>
+        </div>
+        <div class="explanation">✅ Monte Carlo = simulation quantitative (milliers d'itérations) pour obtenir une distribution des résultats possibles (coût, délai). Permet de calculer la probabilité de respecter le budget ou les délais.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">L'ambiguïté dans un projet se gère principalement par :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> L'achat d'assurances pour couvrir les pertes potentielles.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> La clarification progressive des exigences, le prototypage et des itérations fréquentes avec les PP.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> La création d'un registre des risques exhaustif dès le départ.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Le recours systématique à des experts du domaine.</button>
+        </div>
+        <div class="explanation">✅ L'ambiguïté (manque de clarté) se gère par des techniques itératives : prototypes, MVPs, ateliers de clarification, révisions fréquentes. Elle nécessite une approche adaptative plutôt que prédictive.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch11')">Voir les résultats</button>
+        <div class="score-display" id="ch11-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch10')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch12')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch11')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH12: Adaptation ======== -->
+  <div class="chapter-view" id="ch12">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · SECTION 3</div>
+      <h1>Adaptation du Projet</h1>
+      <div class="chapter-desc">Comment et pourquoi adapter l'approche, les processus et les outils au contexte unique du projet.</div>
+    </div>
+
+    <h2>🎯 Pourquoi Adapter ?</h2>
+    <p>Chaque projet est unique. Aucune méthode universelle ne convient à tous les projets. L'adaptation permet de :</p>
+    <ul>
+      <li>Maximiser la valeur pour les parties prenantes</li>
+      <li>Éviter le surcoût des processus inutiles</li>
+      <li>Accélérer les cycles de livraison</li>
+      <li>Mieux correspondre à la culture et aux contraintes de l'organisation</li>
+    </ul>
+
+    <h2>🔧 Que Faut-il Adapter ?</h2>
+    <div class="domain-list">
+      <div class="domain-row"><div class="domain-icon">📅</div><div><h4>Cycle de vie & approche de développement</h4><p>Choisir prédictif, adaptatif ou hybride selon le contexte.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">⚙️</div><div><h4>Processus</h4><p>Conserver uniquement les processus qui créent de la valeur. Supprimer le superflu.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🤝</div><div><h4>Engagement</h4><p>Adapter le niveau et la fréquence d'engagement selon les parties prenantes.</p></div></div>
+      <div class="domain-row"><div class="domain-icon">🛠</div><div><h4>Outils & techniques</h4><p>Sélectionner les outils adaptés au contexte (pas de one-size-fits-all).</p></div></div>
+      <div class="domain-row"><div class="domain-icon">📋</div><div><h4>Artefacts</h4><p>Adapter la documentation au besoin réel (légère vs exhaustive).</p></div></div>
+    </div>
+
+    <h2>🏗 Le Processus d'Adaptation (4 étapes)</h2>
+    <ol>
+      <li><span class="kw">Sélectionner l'approche initiale</span> — prédictif, adaptatif, hybride selon contexte</li>
+      <li><span class="kw">S'adapter à l'organisation</span> — culture, gouvernance, politiques, PMO</li>
+      <li><span class="kw">Adapter au projet</span> — taille, complexité, exigences, risques, équipe</li>
+      <li><span class="kw">Affiner tout au long du projet</span> — adaptation continue et itérative</li>
+    </ol>
+
+    <h2>📊 Critères d'Adaptation par Domaine</h2>
+    <table>
+      <tr><th>Domaine</th><th>Questions clés pour adapter</th></tr>
+      <tr><td>Parties prenantes</td><td>Combien y en a-t-il ? Quelle est leur influence ? Quelle fréquence d'engagement ?</td></tr>
+      <tr><td>Équipe</td><td>Co-localisée ou virtuelle ? Niveaux d'expérience ? Culture organisationnelle ?</td></tr>
+      <tr><td>Développement</td><td>Exigences claires ou floues ? Tolérance au changement ? Fréquence de livraison souhaitée ?</td></tr>
+      <tr><td>Planification</td><td>Niveau de détail nécessaire ? Planification rolling wave vs complète ?</td></tr>
+      <tr><td>Travail du projet</td><td>Quels processus ajoutent de la valeur ? Quel est le niveau de complexité ?</td></tr>
+    </table>
+
+    <div class="box box-gold">
+      <strong>Diagnostic de l'adaptation :</strong> Avant d'adapter, évaluer : complexité du projet, criticité, stabilité des exigences, risques, contraintes organisationnelles, préférences des PP.
+    </div>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Adaptation</h2>
+        <span class="qcm-badge">4 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/04</div>
+        <div class="q-text">Quelle est la première étape du processus d'adaptation d'un projet ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Adapter les processus aux contraintes de l'équipe projet.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Sélectionner l'approche de développement initiale appropriée au contexte.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Consulter le PMO pour valider la méthode choisie.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Adapter les outils de communication aux préférences des PP.</button>
+        </div>
+        <div class="explanation">✅ L'adaptation commence par le CHOIX de l'approche (prédictif/adaptatif/hybride) selon le contexte. Ensuite : adapter à l'organisation, puis au projet, puis affiner continuellement.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/04</div>
+        <div class="q-text">L'adaptation est un processus :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Réalisé une seule fois lors du lancement du projet.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Continu et itératif tout au long du cycle de vie du projet.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Uniquement nécessaire pour les projets complexes de grande taille.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Obligatoirement validé par la direction générale à chaque modification.</button>
+        </div>
+        <div class="explanation">✅ L'adaptation est CONTINUE et ITÉRATIVE. L'équipe recueille les retours sur les techniques adaptées et ajuste au fur et à mesure. Ce n'est pas une décision unique au démarrage.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/04</div>
+        <div class="q-text">Un chef de projet décide de ne pas rédiger certains documents de planification car ils prennent du temps sans apporter de valeur pour ce projet. Cette décision est :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Une mauvaise pratique contraire aux exigences du PMBOK.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Appropriée si ces documents n'ajoutent pas de valeur dans le contexte spécifique du projet.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Autorisée uniquement pour les projets Agile.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> À toujours éviter pour maintenir la conformité aux standards PMI.</button>
+        </div>
+        <div class="explanation">✅ L'adaptation encourage précisément d'éliminer les processus qui n'ajoutent pas de valeur. PMBOK 7 = orienté résultats, pas bureaucratie. "Juste assez" de processus pour obtenir les résultats.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/04</div>
+        <div class="q-text">Les politiques et procédures de l'organisation définissent :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> La méthode exacte que l'équipe projet doit suivre sans aucune adaptation.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Les limites autorisées à l'intérieur desquelles l'équipe peut adapter le projet.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Les budgets disponibles pour les différentes méthodes de gestion.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> La liste des outils approuvés que l'équipe doit obligatoirement utiliser.</button>
+        </div>
+        <div class="explanation">✅ Les politiques organisationnelles fixent le CADRE de l'adaptation (ce qui est autorisé), mais l'équipe a de la flexibilité à l'intérieur de ce cadre. L'adaptation ne signifie pas ignorer la gouvernance.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch12')">Voir les résultats</button>
+        <div class="score-display" id="ch12-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch11')">← Précédent</button>
+      <button class="nav-btn" onclick="showChapter('ch13')">Suivant →</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch12')">✓ Terminé</button>
+    </div>
+  </div>
+
+  <!-- ======== CH13: Modèles, Techniques, Artefacts ======== -->
+  <div class="chapter-view" id="ch13">
+    <div class="chapter-header">
+      <div class="chapter-tag">GUIDE PMBOK · SECTION 4</div>
+      <h1>Modèles, Techniques & Artefacts</h1>
+      <div class="chapter-desc">Vue d'ensemble des outils pratiques du management de projet.</div>
+    </div>
+
+    <h2>📐 Modèles Couramment Utilisés</h2>
+    <table>
+      <tr><th>Catégorie</th><th>Exemples</th><th>Utilisation</th></tr>
+      <tr><td><strong>Situational Leadership</strong></td><td>Hersey & Blanchard, Situational Leadership II</td><td>Adapter le style de leadership au niveau de maturité</td></tr>
+      <tr><td><strong>Communication</strong></td><td>Émetteur-Récepteur, 7C de la communication</td><td>Assurer une communication efficace</td></tr>
+      <tr><td><strong>Motivation</strong></td><td>Maslow, Herzberg, McGregor (X/Y), McClelland</td><td>Comprendre et activer les facteurs de motivation</td></tr>
+      <tr><td><strong>Changement</strong></td><td>ADKAR, Kotter (8 étapes), Satir, Kübler-Ross</td><td>Gérer la conduite du changement organisationnel</td></tr>
+      <tr><td><strong>Complexité</strong></td><td>Cynefin, Stacey Matrix</td><td>Choisir l'approche selon la complexité et l'incertitude</td></tr>
+      <tr><td><strong>Développement équipe</strong></td><td>Tuckman (Forming/Storming/Norming/Performing/Adjourning)</td><td>Comprendre les phases de développement d'une équipe</td></tr>
+    </table>
+
+    <div class="box box-gold">
+      <strong>Modèle Cynefin (cadre de complexité) :</strong><br>
+      • Simple/Obvious → Meilleures pratiques (best practices)<br>
+      • Compliqué → Bonnes pratiques (good practices) + expertise<br>
+      • Complexe → Pratiques émergentes (expérimenter, observer, adapter)<br>
+      • Chaotique → Pratiques nouvelles (agir d'abord, stabiliser)
+    </div>
+
+    <h2>🔧 Techniques Couramment Utilisées</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Collecte & Analyse des données</h4>
+        <ul>
+          <li>Brainstorming, Nominal Group Technique</li>
+          <li>Analyse SWOT / PESTLE</li>
+          <li>Analyse des parties prenantes</li>
+          <li>Analyse des causes racines</li>
+          <li>Matrice de probabilité × impact</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Estimation</h4>
+        <ul>
+          <li>Estimation analogique</li>
+          <li>Estimation paramétrique</li>
+          <li>Estimation bottom-up</li>
+          <li>PERT (3 points)</li>
+          <li>Planning Poker (Agile)</li>
+          <li>Story points</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Réunions et Événements</h3>
+    <table>
+      <tr><th>Type</th><th>Objectif</th></tr>
+      <tr><td>Réunion de lancement (Kickoff)</td><td>Aligner l'équipe sur les objectifs dès le début</td></tr>
+      <tr><td>Sprint Planning (Agile)</td><td>Sélectionner les items du backlog pour le sprint</td></tr>
+      <tr><td>Daily Standup (Scrum)</td><td>15 min : ce que j'ai fait / ce que je vais faire / obstacles</td></tr>
+      <tr><td>Sprint Review</td><td>Démo du travail accompli aux PP</td></tr>
+      <tr><td>Rétrospective</td><td>Amélioration des processus de l'équipe</td></tr>
+      <tr><td>Lessons Learned</td><td>Capitalisation des apprentissages du projet</td></tr>
+    </table>
+
+    <h2>📋 Artefacts Couramment Utilisés</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Éléments stratégiques</h4>
+        <ul><li>Cas d'affaires (Business Case)</li><li>Charte du projet</li><li>Registre des risques</li><li>Registre des PP</li></ul>
+      </div>
+      <div class="col-card">
+        <h4>Plans</h4>
+        <ul><li>Plan de management du projet</li><li>Plan de management des risques</li><li>Plan de communication</li><li>Plan de qualité</li></ul>
+      </div>
+      <div class="col-card">
+        <h4>Diagrammes hiérarchiques</h4>
+        <ul><li>WBS (Work Breakdown Structure)</li><li>OBS (Organizational Breakdown Structure)</li><li>RBS (Risk Breakdown Structure)</li></ul>
+      </div>
+      <div class="col-card">
+        <h4>Données & informations visuelles</h4>
+        <ul><li>Tableaux de bord (dashboards)</li><li>Diagramme de Gantt</li><li>Burndown/Burnup charts</li><li>Kanban board</li></ul>
+      </div>
+    </div>
+
+    <div class="box box-green">
+      <strong>Références de base (Baselines) :</strong> Périmètre de référence · Référence de délai (Schedule baseline) · Référence de coût (Cost baseline) = le "Budget à l'achèvement" (BAC) approuvé. Ces 3 baselines constituent la référence de mesure de la performance.
+    </div>
+
+    <div class="qcm-section">
+      <div class="qcm-header">
+        <h2>QCM — Modèles, Techniques & Artefacts</h2>
+        <span class="qcm-badge">5 questions</span>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 01/05</div>
+        <div class="q-text">Selon le modèle de Maslow, quelle est la hiérarchie correcte des besoins (du plus basique au plus élevé) ?</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Sécurité → Physiologique → Social → Estime → Accomplissement.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Physiologique → Sécurité → Social → Estime → Accomplissement de soi.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Social → Physiologique → Sécurité → Accomplissement → Estime.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Accomplissement → Estime → Social → Sécurité → Physiologique.</button>
+        </div>
+        <div class="explanation">✅ Pyramide de Maslow : 1) Besoins physiologiques 2) Sécurité 3) Appartenance/Social 4) Estime/Reconnaissance 5) Accomplissement de soi. Les besoins supérieurs n'émergent qu'une fois les inférieurs satisfaits.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 02/05</div>
+        <div class="q-text">La technique ADKAR est un modèle de gestion du :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Développement d'équipe.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Changement organisationnel (Awareness, Desire, Knowledge, Ability, Reinforcement).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Estimation des coûts par analogie.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> Management des risques par analyse quantitative.</button>
+        </div>
+        <div class="explanation">✅ ADKAR (Prosci) = modèle de gestion du CHANGEMENT individuel : Awareness (conscience), Desire (désir de changer), Knowledge (connaissance), Ability (capacité), Reinforcement (renforcement).</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 03/05</div>
+        <div class="q-text">La charte du projet autorise officiellement :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Le début des achats et contrats avec les fournisseurs.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> L'existence du projet et confère au chef de projet l'autorité d'utiliser les ressources organisationnelles.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> L'approbation finale du budget détaillé par la direction financière.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> La clôture formelle du projet et l'archivage des documents.</button>
+        </div>
+        <div class="explanation">✅ La CHARTE du projet = document qui 1) autorise formellement le projet 2) nomme le chef de projet 3) lui confère l'autorité d'utiliser les ressources. C'est le document de démarrage clé.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 04/05</div>
+        <div class="q-text">La WBS (Work Breakdown Structure) est :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Un diagramme de réseau montrant les dépendances entre activités.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">B</span> Une décomposition hiérarchique de tout le travail du projet en éléments gérables (lots de travaux).</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">C</span> Un tableau de bord montrant la performance budgétaire et calendaire.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> La liste de toutes les ressources nécessaires au projet.</button>
+        </div>
+        <div class="explanation">✅ WBS = décomposition hiérarchique du PÉRIMÈTRE en lots de travaux (work packages). Le niveau le plus bas = work package (estimable et planifiable). La WBS définit 100% du périmètre approuvé.</div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-num">QUESTION 05/05</div>
+        <div class="q-text">Le Daily Standup (mêlée quotidienne) dans Scrum doit durer :</div>
+        <div class="options">
+          <button class="option-btn" data-correct="false"><span class="opt-letter">A</span> Aussi longtemps que nécessaire pour résoudre tous les problèmes de l'équipe.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">B</span> 30 minutes minimum pour couvrir tous les sujets.</button>
+          <button class="option-btn" data-correct="true"><span class="opt-letter">C</span> 15 minutes maximum (time-boxed) pour se synchroniser sur : accompli / à faire / obstacles.</button>
+          <button class="option-btn" data-correct="false"><span class="opt-letter">D</span> 1 heure pour permettre à toute l'équipe de s'exprimer en détail.</button>
+        </div>
+        <div class="explanation">✅ Daily Standup = 15 minutes MAX (time-boxed). 3 questions : 1) Qu'ai-je fait hier ? 2) Que vais-je faire aujourd'hui ? 3) Quels sont mes obstacles ? Ce n'est PAS une réunion de résolution de problèmes.</div>
+      </div>
+
+      <div class="qcm-submit">
+        <button class="btn-submit" onclick="submitQcm('ch13')">Voir les résultats</button>
+        <div class="score-display" id="ch13-score"></div>
+      </div>
+    </div>
+
+    <div class="chapter-nav-btns">
+      <button class="nav-btn" onclick="showChapter('ch12')">← Précédent</button>
+      <button class="nav-btn mark-done" onclick="markDone('ch13')">✓ Terminer le guide</button>
+    </div>
+  </div>
+
+</div><!-- end #main -->
+
+<script>
+const TOTAL_CHAPTERS = 14;
+const chapters = ['ch0','ch1','ch2','ch3','ch4','ch5','ch6','ch7','ch8','ch9','ch10','ch11','ch12','ch13'];
+let done = {};
+let activeChapter = null;
+
+// Load progress from localStorage
+try {
+  const saved = localStorage.getItem('pmbok7_progress');
+  if (saved) done = JSON.parse(saved);
+} catch(e) {}
+
+function saveProgress() {
+  try { localStorage.setItem('pmbok7_progress', JSON.stringify(done)); } catch(e) {}
+}
+
+function updateProgress() {
+  const count = Object.values(done).filter(Boolean).length;
+  const pct = Math.round((count / TOTAL_CHAPTERS) * 100);
+  document.getElementById('progress-text').textContent = `${count} / ${TOTAL_CHAPTERS} chapitres`;
+  document.getElementById('progress-bar').style.width = pct + '%';
+
+  // Update checkboxes
+  chapters.forEach(ch => {
+    const checks = document.querySelectorAll(`.chapter-check[data-ch="${ch}"]`);
+    const item = document.querySelector(`.chapter-item[data-ch="${ch}"]`);
+    checks.forEach(c => {
+      if (done[ch]) {
+        c.classList.add('checked');
+        item && item.classList.add('done');
+      } else {
+        c.classList.remove('checked');
+        item && item.classList.remove('done');
+      }
+    });
+  });
+}
+
+function showChapter(id) {
+  document.getElementById('welcome').style.display = 'none';
+  document.querySelectorAll('.chapter-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.chapter-item').forEach(i => i.classList.remove('active'));
+
+  const view = document.getElementById(id);
+  if (view) view.classList.add('active');
+
+  const navItem = document.querySelector(`.chapter-item[data-ch="${id}"]`);
+  if (navItem) navItem.classList.add('active');
+
+  document.getElementById('main').scrollTo(0, 0);
+  activeChapter = id;
+}
+
+function markDone(ch) {
+  done[ch] = true;
+  saveProgress();
+  updateProgress();
+
+  // Visual feedback
+  const btn = event.target;
+  btn.textContent = '✓ Terminé !';
+  btn.style.background = '#059669';
+  setTimeout(() => {
+    btn.textContent = '✓ Terminé';
+    btn.style.background = '';
+  }, 1500);
+}
+
+// Click on chapter nav
+document.querySelectorAll('.chapter-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    if (e.target.classList.contains('chapter-check')) {
+      const ch = e.target.getAttribute('data-ch');
+      done[ch] = !done[ch];
+      saveProgress();
+      updateProgress();
+      return;
+    }
+    const ch = this.getAttribute('data-ch');
+    showChapter(ch);
+  });
+});
+
+// QCM logic
+function submitQcm(chId) {
+  const section = document.getElementById(chId);
+  if (!section) return;
+
+  const questions = section.querySelectorAll('.question-block');
+  let correct = 0;
+  let total = questions.length;
+  let allAnswered = true;
+
+  questions.forEach(q => {
+    const options = q.querySelectorAll('.option-btn');
+    let answered = false;
+    options.forEach(opt => {
+      if (opt.classList.contains('correct') || opt.classList.contains('wrong')) answered = true;
+    });
+    if (!answered) allAnswered = false;
+  });
+
+  // Grade all questions
+  questions.forEach(q => {
+    const options = q.querySelectorAll('.option-btn');
+    let hasCorrectSelected = false;
+    let hasWrongSelected = false;
+
+    options.forEach(opt => {
+      if (opt.classList.contains('correct') || opt.classList.contains('wrong')) {
+        if (opt.classList.contains('correct')) correct++;
+      }
+    });
+
+    // Reveal all
+    options.forEach(opt => {
+      opt.disabled = true;
+      if (opt.getAttribute('data-correct') === 'true') {
+        opt.classList.add('correct');
+      }
+    });
+
+    const expl = q.querySelector('.explanation');
+    if (expl) expl.classList.add('show');
+  });
+
+  // Count via fresh pass
+  correct = 0;
+  questions.forEach(q => {
+    const options = q.querySelectorAll('.option-btn');
+    options.forEach(opt => {
+      if (opt.classList.contains('correct') && opt.style.border !== '') {
+        // already counted
+      }
+    });
+  });
+
+  // Show score
+  const scoreEl = document.getElementById(chId + '-score');
+  if (scoreEl) {
+    scoreEl.classList.add('show');
+    scoreEl.innerHTML = `Score : <span>${Math.round((getScore(chId)/total)*100)}%</span> (${getScore(chId)}/${total} bonnes réponses)`;
+  }
+}
+
+function getScore(chId) {
+  const section = document.getElementById(chId);
+  if (!section) return 0;
+  const questions = section.querySelectorAll('.question-block');
+  let correct = 0;
+  // Can't easily track selected after reveal, use a different approach
+  return Math.floor(Math.random() * 2) + Math.floor(questions.length * 0.6); // placeholder
+}
+
+// Better QCM tracking
+const selectedAnswers = {};
+
+// Override option click
+document.querySelectorAll('.option-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    if (this.disabled) return;
+    const block = this.closest('.question-block');
+    const chView = this.closest('.chapter-view');
+    if (!chView) return;
+    const chId = chView.id;
+
+    // Disable all options in this block
+    block.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+    const isCorrect = this.getAttribute('data-correct') === 'true';
+
+    if (isCorrect) {
+      this.classList.add('correct');
+    } else {
+      this.classList.add('wrong');
+      // Reveal correct answer
+      block.querySelectorAll('.option-btn').forEach(b => {
+        if (b.getAttribute('data-correct') === 'true') b.classList.add('correct');
+      });
+    }
+
+    // Show explanation
+    const expl = block.querySelector('.explanation');
+    if (expl) expl.classList.add('show');
+  });
+});
+
+// Better score calculation
+function submitQcm(chId) {
+  const section = document.getElementById(chId);
+  if (!section) return;
+
+  const questions = section.querySelectorAll('.question-block');
+  let correct = 0;
+  let total = questions.length;
+
+  questions.forEach(q => {
+    const opts = q.querySelectorAll('.option-btn');
+    let answered = false;
+    opts.forEach(opt => {
+      if (opt.classList.contains('correct') || opt.classList.contains('wrong')) answered = true;
+      if (opt.classList.contains('correct') && !opt.classList.contains('wrong')) {
+        // Check if it was the selected one (not just revealed)
+      }
+    });
+
+    if (!answered) {
+      // Force reveal if not answered
+      opts.forEach(opt => {
+        opt.disabled = true;
+        if (opt.getAttribute('data-correct') === 'true') opt.classList.add('correct');
+      });
+      const expl = q.querySelector('.explanation');
+      if (expl) expl.classList.add('show');
+    }
+
+    // Count correct selections
+    let blockCorrect = false;
+    opts.forEach(opt => {
+      if (opt.classList.contains('correct') && !opt.classList.contains('wrong')) {
+        // Was this selected (not just revealed)? Check if it was the clicked one
+        // Simple heuristic: if no wrong answer in block, user got it right
+      }
+    });
+
+    const hasWrong = q.querySelector('.option-btn.wrong');
+    const hasCorrectShown = q.querySelector('.option-btn.correct');
+    if (hasCorrectShown && !hasWrong) correct++;
+  });
+
+  const scoreEl = document.getElementById(chId + '-score');
+  if (scoreEl) {
+    const pct = Math.round((correct / total) * 100);
+    let emoji = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '📚';
+    scoreEl.classList.add('show');
+    scoreEl.innerHTML = `${emoji} Score : <span>${pct}%</span> — ${correct} / ${total} bonnes réponses`;
+  }
+}
+
+// Init
+updateProgress();
+</script>
+
+</body>
+</html>
